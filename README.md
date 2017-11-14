@@ -2,7 +2,9 @@
 
 ## Auteurs
 Valentin Bouquet - <valentin-bouquet@hotmail.fr>
+
 Rémy Pocquerusse - <remypoc@free.fr>
+
 Oussemo Oulhaci - <oussem93@hotmail.fr>
 
 ## Technologies
