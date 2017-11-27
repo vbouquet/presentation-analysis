@@ -12,23 +12,23 @@ vous pouvez l'obtenir ici : [Télécharger vagrant](https://www.vagrantup.com/do
 
 3. Accédez au paramètres depuis les onglets ou avec le raccourcis "CTRL + ALT + S". Sélectionnez "Project: django_rest_application" puis sélectionnez "Project Interpreter"
 
-![Etape 3](https://github.com/vbouquet/realtime-keynote-feedback/tree/master/src/server/django_rest/ressources_readme/pycharm1.png)
+![Etape 3](ressources_readme/pycharm1.png)
 
 4. Sélectionner la petite icone rouage en haut à droite et cliquez sur "add remote"
 
-![Etape 4](https://github.com/vbouquet/realtime-keynote-feedback/tree/master/src/server/django_rest/ressources_readme/pycharm2.png)
+![Etape 4](ressources_readme/pycharm2.png)
 
 5. Cliquez sur vagrant en haut à gauche de la nouvelle fenêtre et sélectionnez le répertoire courant du dossier de votre projet "django_rest_application". Ensuite ajoutez spécifiez dans le champs "python interpreter path" la version "/usr/bin/python3.5" puis attendez le temps que Pycharm mette à jour les ressources.
 
-![Etape 5](https://github.com/vbouquet/realtime-keynote-feedback/tree/master/src/server/django_rest/ressources_readme/pycharm3.png)
+![Etape 5](ressources_readme/pycharm3.png)
 
 6. Ensuite retournez à l'éditeur, et cliquez sur "django_rest_application" pour changer et editer la configuration
 
-![Etape 6](https://github.com/vbouquet/realtime-keynote-feedback/tree/master/src/server/django_rest/ressources_readme/pycharm4.png)
+![Etape 6](ressources_readme/pycharm4.png)
 
 7. Maintenant éditez la configuration, pour cela il faut modifier le champs 'host: 0.0.0.0' et vérifier que le port est bien '8000'. Ensuite allez sur le champs 'python interpreter' et sélectionnez 'Project default'.
 
-![Etape 7](https://github.com/vbouquet/realtime-keynote-feedback/tree/master/src/server/django_rest/ressources_readme/pycharm5.png)
+![Etape 7](ressources_readme/pycharm5.png)
 
 8. Voila, vous pouvez maintenant lancer votre première application en cliquant sur le bouton run en haut à droite (le triangle vert) et vous rendre sur l'url localhost:8000 depuis votre navigateur
 
