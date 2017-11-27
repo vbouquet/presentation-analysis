@@ -16,6 +16,7 @@ Oussemo Oulhaci - <oussem93@hotmail.fr>
 * React: MVC Framework for dynamic statefull web pages.
 * Express: Basic server in javascript (for front-end testing).
 * Django-rest: Framework for building web API.
+* OpenCV: Computer vision and machine learning library.
 
 ## Prérequis
 * Git, gestionnaire de version - [Télécharger git](https://git-scm.com/downloads)
