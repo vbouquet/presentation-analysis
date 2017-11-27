@@ -24,7 +24,7 @@ class PresenceChart extends React.Component {
   componentDidMount() {
     this.timerID = setInterval(
       () => this.tick(),
-      4000
+      1000,
     );
   }
 

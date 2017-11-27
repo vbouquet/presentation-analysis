@@ -39,7 +39,7 @@ class LogginForm extends React.Component {
   }
 
   render() {
-    if (this.state.logginRedirection)
+    if (!this.state.logginRedirection)
       return <RecordingCenter />
     else {
       return (
