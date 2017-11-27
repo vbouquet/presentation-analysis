@@ -1,8 +1,82 @@
-node_modules
+# Ignore vagrant generated files
 .vagrant
-package-lock.json
-*.log*
-*.log
-npm-debug*
+
+# Ignore idea/text editors config
 .vscode
+*.idea
+
+# Ignore webpack javascript file
 src/client/public
+
+# Ignore javascript modules and generated files
+node_modules
+package-lock.json
+npm-debug*
+
+# Ignore generated logs
+*.log*
+
+# Byte-compiled / optimized / DLL files
+*__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+*.log
+.static_storage/
+.media/
+local_settings.py
+
+# pyenv
+.python-version
+
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
