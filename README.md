@@ -42,7 +42,7 @@ python3.5 $DJANGO_DIR/manage.py runserver 0.0.0.0:8000 &
 
 ## Developpement
 
-* ![DJANGO REST](https://github.com/vbouquet/realtime-keynote-feedback/src/server/django_rest/)
+* ![DJANGO REST](https://github.com/vbouquet/realtime-keynote-feedback/tree/master/src/server/django_rest)
 
 ## CLI
 
