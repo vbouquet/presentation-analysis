@@ -11,10 +11,10 @@ Vagrant.configure(2) do |config|
         vb.memory = "2048"
         vb.cpus = "2"
   end
-
+  
   config.vm.provision 'shell', path: 'scripts/install.sh'
   config.vm.provision 'shell', path: 'scripts/install_front_end.sh'
   config.vm.provision 'shell', path: 'scripts/install_django_server.sh'
-  config.vm.provision 'shell', path: 'scripts/install_clean.sh'
+  config.vm.provision 'shell', path: 'scripts/install_opencv.sh'
 
 end

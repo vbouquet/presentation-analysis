@@ -11,4 +11,5 @@ source .bashrc
 apt-get update
 apt-get -y upgrade
 
-apt-get install -y git
+# Install utilities
+apt-get install -y git unzip wget

@@ -107,6 +107,10 @@ python3.5 $DJANGO_DIR/manager.py migrate
 
 * [Style de code et conventions pour react et javascript](https://github.com/airbnb/javascript/tree/master/react)
 
+* [Style de code et conventions pep8 pour python](https://www.python.org/dev/peps/pep-0008/)
+
+* [Opencv - Image processing with python API](https://opencv-python-tutroals.readthedocs.io/en/latest/py_tutorials/py_imgproc/py_table_of_contents_imgproc/py_table_of_contents_imgproc.html#py-table-of-content-imgproc)
+
 * [Tutoriel pour utiliser react avec npm, babel et webpack](https://www.codementor.io/tamizhvendan/beginner-guide-setup-reactjs-environment-npm-babel-6-webpack-du107r9zr)
 
 * [Etat des lieux des différentes technologies javascript et de leur utilité](https://medium.com/@peterxjang/modern-javascript-explained-for-dinosaurs-f695e9747b70)
