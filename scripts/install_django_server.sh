@@ -1,21 +1,27 @@
+#!/usr/bin/env sh
 # Back-end ressources installation
 
 HOME_DIR="/home/ubuntu"
-PROJECT_DIR="/vagrant"
+if $CI
+then
+    PROJECT_DIR=$TRAVIS_BUILD_DIR
+else
+    PROJECT_DIR="/vagrant"
+fi
 DJANGO_DIR=$PROJECT_DIR/src/server/django_rest
 
-echo 'DJANGO_DIR="/vagrant/src/server/django_rest"' >> .bashrc
+echo "DJANGO_DIR='$DJANGO_DIR'" >> .bashrc
 source .bashrc
 
-apt-get install -y python3.5
-apt-get install -y python3-pip
+sudo apt-get install -y python3.5
+sudo apt-get install -y python3-pip
 
 sudo pip3 install --upgrade pip
 sudo pip3 install pipreqs
 
 sudo pip3 install coreapi==2.3.3
 
-pipreqs $DJANGO_DIR --force --savepath $DJANGO_DIR/requirements.txt
+sudo pipreqs $DJANGO_DIR --force --savepath $DJANGO_DIR/requirements.txt
 sudo pip3 install -r $DJANGO_DIR/requirements.txt
 
 cd $DJANGO_DIR
