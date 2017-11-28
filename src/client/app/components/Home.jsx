@@ -1,13 +1,14 @@
 import React, {Component}   from 'react';
 import ReactDOM             from 'react-dom';
 import LogginForm           from './LogginForm.jsx';
+import MenuAppBar           from './MenuAppBar.jsx';
 
 class Home extends React.Component {
   render() {
-    const title = "Bienvenue sur l'outil d'analyse de présentation !";
     return (
       <div className="component-home">
-        <h1> {title} </h1>
+        <MenuAppBar />
+        <br/> <br/> <br/> <br/> <br/>
         <LogginForm />
       </div>
     );

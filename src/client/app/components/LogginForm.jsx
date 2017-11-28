@@ -1,6 +1,9 @@
 import React, {Component}   from 'react';
 import ReactDOM             from 'react-dom';
 import RecordingCenter      from './RecordingCenter.jsx';
+import Button               from 'material-ui/Button';
+import Input, { InputLabel } from 'material-ui/Input';
+import { FormControl, FormHelperText } from 'material-ui/Form';
 
 class LogginForm extends React.Component {
   constructor(props){
@@ -12,8 +15,8 @@ class LogginForm extends React.Component {
       logginRedirection : false
     };
 
-    this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleInputChange  = this.handleInputChange.bind(this);
+    this.handleSubmit       = this.handleSubmit.bind(this);
   }
 
   handleInputChange(event) {
@@ -28,6 +31,7 @@ class LogginForm extends React.Component {
 
   handleSubmit(event) {
     // TODO Add validation form
+    console.log("handleSubmit");
     if (this.state.firstName.length > 2 && this.state.lastName.length > 2) {
       this.setState({
         logginRedirection: true
@@ -39,28 +43,27 @@ class LogginForm extends React.Component {
   }
 
   render() {
-    if (!this.state.logginRedirection)
+    if (this.state.logginRedirection)
       return <RecordingCenter />
     else {
       return (
         <form onSubmit={this.handleSubmit}>
-          <label>
-            Firstname:
-            <input
-              name="firstName"
-              type="text"
+          <FormControl>
+            <InputLabel htmlFor="firstname-input">Firstname</InputLabel>
+            <Input name="firstName" onChange={this.handleInputChange}
               value={this.state.firstName}
-              onChange={this.handleInputChange}
             />
-            Lastname:
-            <input
-              name="lastName"
-              type="text"
+          </FormControl>
+          <FormControl>
+            <InputLabel htmlFor="name-input">Lastname</InputLabel>
+            <Input name="lastName" onChange={this.handleInputChange}
               value={this.state.lastName}
-              onChange={this.handleInputChange}
             />
-          </label>
-          <input type="submit" value="Submit" />
+          </FormControl>
+
+          <Button color="primary" className="submit" onClick={this.handleSubmit}>
+            Log in
+          </Button>
         </form>
       );
     }
