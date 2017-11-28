@@ -39,6 +39,10 @@ sudo ldconfig
 
 # cd $HOME_DIR
 cd ~/
+
 echo "export PYTHONPATH=$PYTHONPATH:/usr/local/lib/python3.5/dist-packages" >> \
     .bashrc
 source .bashrc
+
+ls -l
+sudo find . -name dist-packages 2>/dev/null

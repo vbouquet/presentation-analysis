@@ -1,7 +1,11 @@
+language: python
 os: linux
 dist: trusty
 sudo: required
 
+python:
+  - 3.5
+  
 install:
   - ls -l
   - sudo chmod -R +x ./scripts/
