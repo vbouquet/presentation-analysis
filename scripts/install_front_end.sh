@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 # Front-end ressources installation
 
 HOME_DIR="/home/ubuntu"

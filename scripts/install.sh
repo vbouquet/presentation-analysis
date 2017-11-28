@@ -1,19 +1,20 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 # Main ressources installation
 
 HOME_DIR="/home/ubuntu"
 PROJECT_DIR="/vagrant"
 
-if !$CI
+if $CI
 then
-    echo 'HOME_DIR="/home/ubuntu"' >> .bashrc
-    echo 'PROJECT_DIR="/vagrant"' >> .bashrc
-else
     echo $CI
     echo "HOME_DIR='$HOME'" >> .bashrc
     echo "PROJECT_DIR='$TRAVIS_BUILD_DIR'" >> .bashrc
     echo $HOME_DIR
     echo $PROJECT_DIR
+else
+    echo 'HOME_DIR="/home/ubuntu"' >> .bashrc
+    echo 'PROJECT_DIR="/vagrant"' >> .bashrc
+fi
 
 source .bashrc
 

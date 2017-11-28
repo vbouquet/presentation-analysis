@@ -1,7 +1,6 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 # Back-end ressources installation
 
-HOME_DIR="/home/ubuntu"
 if $CI
 then
     PROJECT_DIR=$TRAVIS_BUILD_DIR
