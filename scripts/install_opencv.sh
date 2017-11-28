@@ -36,13 +36,16 @@ sudo cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local \
 sudo make -j4
 sudo make install
 sudo ldconfig
-
-# cd $HOME_DIR
+cd ~/.virtualenvs/cv/lib/python3.4/site-packages/
+ln -s /usr/local/lib/python3.4/site-packages/cv2.cpython-34m.so cv2.so
 cd ~/
-
-echo "export PYTHONPATH=$PYTHONPATH:/usr/local/lib/python3.5/dist-packages" >> \
-    .bashrc
+if $CI
+then
+    echo "export PYTHONPATH=$PYTHONPATH:~/virtualenv/cv/lib/python3.5/site-packages" >> \
+        .bashrc
+    ls ~/virtualenv
+else
+    echo "export PYTHONPATH=$PYTHONPATH:/usr/local/lib/python3.5/dist-packages" >> \
+        .bashrc
+fi
 source .bashrc
-
-ls -l
-sudo find . -name dist-packages 2>/dev/null
