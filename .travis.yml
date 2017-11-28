@@ -1,0 +1,15 @@
+language: python
+os: linux
+dist: trusty
+sudo: required 
+
+before_install:
+  - ./scripts/install.sh
+  - ./scripts/install_front_end.sh
+  - ./scripts/install_django_server.sh
+  - ./scripts/install_opencv.sh
+  - ./scripts/install_clean.sh
+  
+notifications:
+  email: false
+  slack: psi-miage:LvhaFh7ES6JTOVLILto5OF3Y
