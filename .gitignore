@@ -80,3 +80,6 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+
+# Media files
+src/server/django_rest/media/
