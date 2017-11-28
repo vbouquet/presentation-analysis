@@ -17,9 +17,9 @@ source .bashrc
 if ! $CI
 then
     sudo apt-get install -y python3.5
-    sudo apt-get install -y python3-pip
 fi
 
+sudo apt-get install -y python3-pip
 sudo pip3 install --upgrade pip
 sudo pip3 install pipreqs
 
