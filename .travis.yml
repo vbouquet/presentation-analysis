@@ -1,9 +1,10 @@
-language: python
 os: linux
 dist: trusty
 sudo: required
 
 install:
+  - ls -l
+  - sudo chmod -R +x ./scripts/
   - sudo ./scripts/install.sh
   - sudo ./scripts/install_front_end.sh
   - sudo ./scripts/install_django_server.sh

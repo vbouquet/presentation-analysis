@@ -4,8 +4,17 @@
 HOME_DIR="/home/ubuntu"
 PROJECT_DIR="/vagrant"
 
-echo 'HOME_DIR="/home/ubuntu"' >> .bashrc
-echo 'PROJECT_DIR="/vagrant"' >> .bashrc
+if !$CI
+then
+    echo 'HOME_DIR="/home/ubuntu"' >> .bashrc
+    echo 'PROJECT_DIR="/vagrant"' >> .bashrc
+else
+    echo $CI
+    echo "HOME_DIR='$HOME'" >> .bashrc
+    echo "PROJECT_DIR='$TRAVIS_BUILD_DIR'" >> .bashrc
+    echo $HOME_DIR
+    echo $PROJECT_DIR
+
 source .bashrc
 
 # Dependencies installation on virtual machine

@@ -10,7 +10,7 @@ else
 fi
 EXPRESS_DIR=$PROJECT_DIR/src/server/express
 
-echo 'EXPRESS_DIR="/vagrant/src/server/express"' >> .bashrc
+echo "EXPRESS_DIR='$EXPRESS_DIR'" >> .bashrc
 source .bashrc
 
 sudo apt-get install -y npm
