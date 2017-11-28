@@ -2,3 +2,4 @@
 # Clean-up installation
 
 sudo apt-get autoremove -y
+exit 0
