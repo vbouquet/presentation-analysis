@@ -1,9 +1,12 @@
-import React, {Component}   from 'react';
-import ReactDOM             from 'react-dom';
-import RecordingCenter      from './RecordingCenter.jsx';
-import Button               from 'material-ui/Button';
-import Input, { InputLabel } from 'material-ui/Input';
+import React, {Component}              from 'react';
+import ReactDOM                        from 'react-dom';
+import RecordingCenter                 from './RecordingCenter.jsx';
+import Button                          from 'material-ui/Button';
+import Input, { InputLabel }           from 'material-ui/Input';
 import { FormControl, FormHelperText } from 'material-ui/Form';
+import Grid                            from 'material-ui/Grid';
+import Paper                           from 'material-ui/Paper';
+
 
 class LogginForm extends React.Component {
   constructor(props){
@@ -22,7 +25,6 @@ class LogginForm extends React.Component {
   handleInputChange(event) {
     const target = event.target;
 
-    // TODO pourquoi ça fait lagger la page web ? C'est ridicule !
     this.setState({
       [target.name]: target.value
     });
@@ -43,28 +45,44 @@ class LogginForm extends React.Component {
   }
 
   render() {
+    const { classes } = this.props;
     if (this.state.logginRedirection)
       return <RecordingCenter />
     else {
       return (
-        <form onSubmit={this.handleSubmit}>
-          <FormControl>
-            <InputLabel htmlFor="firstname-input">Firstname</InputLabel>
-            <Input name="firstName" onChange={this.handleInputChange}
-              value={this.state.firstName}
-            />
-          </FormControl>
-          <FormControl>
-            <InputLabel htmlFor="name-input">Lastname</InputLabel>
-            <Input name="lastName" onChange={this.handleInputChange}
-              value={this.state.lastName}
-            />
-          </FormControl>
+        <Paper>
+          <Grid container direction="row" alignItems="center">
+            <Grid item xs={1}/>
+            <Grid item xs={10}>
+              <FormControl fullWidth>
+                <InputLabel htmlFor="firstname-input">Firstname</InputLabel>
+                <Input name="firstName" onChange={this.handleInputChange}
+                  value={this.state.firstName}
+                />
+              </FormControl>
+            </Grid>
+            <Grid item xs={1}/>
 
-          <Button color="primary" className="submit" onClick={this.handleSubmit}>
-            Log in
-          </Button>
-        </form>
+            <Grid item xs={1}/>
+            <Grid item xs={10}>
+              <FormControl fullWidth>
+                <InputLabel htmlFor="name-input">Lastname</InputLabel>
+                <Input name="lastName" onChange={this.handleInputChange}
+                  value={this.state.lastName}
+                />
+              </FormControl>
+            </Grid>
+            <Grid item xs={1}/>
+
+            <Grid item xs={8}/>
+            <Grid item xs={3}>
+              <Button raised color="primary" className="submit"
+                onClick={this.handleSubmit}>
+                Log in
+              </Button>
+            </Grid>
+          </Grid>
+        </Paper>
       );
     }
   }
