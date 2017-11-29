@@ -2,7 +2,6 @@
 # Back-end ressources installation
 
 if [[ "$CI" == "true" ]]; then
-then
     PYTHON=python3
     PROJECT_DIR=$TRAVIS_BUILD_DIR
 else
@@ -15,7 +14,6 @@ echo "DJANGO_DIR='$DJANGO_DIR'" >> .bashrc
 source .bashrc
 
 if [[ "$CI" != "true" ]]; then
-then
     sudo apt-get install -y python3.5
 fi
 

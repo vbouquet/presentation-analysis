@@ -3,7 +3,6 @@
 
 HOME_DIR="/home/ubuntu"
 if [[ "$CI" == "true" ]]; then
-then
     PROJECT_DIR=$TRAVIS_BUILD_DIR
 else
     PROJECT_DIR="/vagrant"
@@ -21,7 +20,6 @@ sudo apt-get install -y nodejs
 # Fix error with shared folder and npm modules
 # https://medium.com/@dtinth/isolating-node-modules-in-vagrant-9e646067b36
 if [[ "$CI" != "true" ]]; then
-then
     mkdir $HOME_DIR/vagrant_node_modules
     mkdir $PROJECT_DIR/node_modules
     mount --bind $HOME_DIR/vagrant_node_modules $PROJECT_DIR/node_modules
