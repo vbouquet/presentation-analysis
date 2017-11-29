@@ -57,7 +57,7 @@ class MenuAppBar extends React.Component {
               <MenuIcon />
             </IconButton>
             <Typography type="title" color="inherit" className={classes.flex}>
-              Home
+              {this.props.title}
             </Typography>
             {auth && (
               <div>
@@ -90,6 +90,7 @@ class MenuAppBar extends React.Component {
             )}
           </Toolbar>
         </AppBar>
+        <br/> <br/> <br/> <br/> <br/> <br/> <br/> <br/> <br/> <br/><br/> <br/> <br/> <br/> <br/>
       </div>
     );
   }
