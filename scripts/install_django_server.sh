@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Back-end ressources installation
 
-if $CI
+if [[ "$CI" == "true" ]]; then
 then
     PYTHON=python3
     PROJECT_DIR=$TRAVIS_BUILD_DIR
@@ -14,7 +14,7 @@ DJANGO_DIR=$PROJECT_DIR/src/server/django_rest
 echo "DJANGO_DIR='$DJANGO_DIR'" >> .bashrc
 source .bashrc
 
-if ! $CI
+if [[ "$CI" != "true" ]]; then
 then
     sudo apt-get install -y python3.5
 fi

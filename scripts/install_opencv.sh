@@ -38,7 +38,7 @@ sudo make install
 sudo ldconfig
 
 cd ~/
-if $CI
+if [[ "$CI" == "true" ]]; then
 then
     echo "export PYTHONPATH=$PYTHONPATH:~/virtualenv/python3.5/site-packages" >> \
         .bashrc
