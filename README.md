@@ -1,6 +1,7 @@
 # Projet M2 MIAGE
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Build Status](https://travis-ci.org/vbouquet/realtime-keynote-feedback.svg?branch=master)](https://travis-ci.org/vbouquet/realtime-keynote-feedback)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/9aff66ec6dc841a5971b1647be3b9657)](https://www.codacy.com/app/Remypoc/realtime-keynote-feedback?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=vbouquet/realtime-keynote-feedback&amp;utm_campaign=Badge_Grade)
 
 ## Auteurs
 Valentin Bouquet - <valentin-bouquet@hotmail.fr>
