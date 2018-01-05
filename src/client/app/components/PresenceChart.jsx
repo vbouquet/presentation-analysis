@@ -24,7 +24,7 @@ class PresenceChart extends React.Component {
   componentDidMount() {
     this.timerID = setInterval(
       () => this.tick(),
-      1000,
+      1500,
     );
   }
 
@@ -48,11 +48,15 @@ class PresenceChart extends React.Component {
   render() {
     const active = this.props.active;
     if (active)
-      return <SimpleLineChart data={this.state.data} />;
+      return (
+        <SimpleLineChart data={this.state.data} />
+      );
     else {
-      <div>
-        No Presence chart active !
-      </div>
+      return (
+        <div>
+          No Presence chart active !
+        </div>
+      );
     }
   }
 }

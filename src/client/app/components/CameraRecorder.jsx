@@ -1,6 +1,8 @@
 import React                from 'react';
 import ReactDOM             from 'react-dom';
 import Camera               from './Camera.jsx';
+import Button               from 'material-ui/Button';
+
 
 navigator.getUserMedia =  navigator.getUserMedia ||
                           navigator.webkitGetUserMedia ||
@@ -110,15 +112,15 @@ class CameraRecorder extends React.Component {
     return (
       <div className="component-recorder">
         <Camera src={this.state.stream} />
-        <br/>
-        <button className="button-recording-start"
+        {/*Add space */}
+        <Button className="button-recording-start" raised color="primary"
           onClick={this.startRecording}>
-          Start Recording
-        </button>
-        <button className="button-recording-stop"
+          Record
+        </Button>
+        <Button className="button-recording-stop" raised color="accent"
           onClick={this.stopRecording}>
-          Stop Recording
-        </button>
+          Stop
+        </Button>
       </div>
     )
   }
