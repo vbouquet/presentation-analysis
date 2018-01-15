@@ -1,16 +1,39 @@
-import React, {Component}   from 'react';
-import ReactDOM             from 'react-dom';
-import Grid                 from 'material-ui/Grid';
-import Paper                from 'material-ui/Paper';
+import React, {Component} from 'react';
+import ReactDOM from 'react-dom';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import Grid from 'material-ui/Grid';
+import Paper from 'material-ui/Paper';
+import PresenceChart from '../components/PresenceChart.jsx';
+import CameraRecorder from '../components/CameraRecorder.jsx';
+import { changeMenuTitle } from '../actions';
 
-import PresenceChart        from '../components/PresenceChart.jsx';
-import CameraRecorder       from '../components/CameraRecorder.jsx';
+const mapDispatchToProps = dispatch => {
+  return {
+    actions: {
+      changeMenuTitle: title => dispatch(changeMenuTitle(title))
+    }
+  };
+};
 
+const propTypes = {
+  actions: PropTypes.shape({
+    changeMenuTitle: PropTypes.func.isRequired
+  })
+};
 
 class RecordingCenter extends React.Component {
   constructor(props) {
     super(props);
-    document.title = "Home - Realtime keynote analysis";
+    this.state = {
+      title: "Recording center - Realtime keynote analysis"
+    }
+  }
+
+  componentDidMount() {
+    const title = this.state.title;
+    document.title = title;
+    this.props.actions.changeMenuTitle(title);
   }
 
   render() {
@@ -38,5 +61,7 @@ class RecordingCenter extends React.Component {
   }
 }
 
+RecordingCenter = connect(null, mapDispatchToProps)(RecordingCenter);
+RecordingCenter.propTypes = propTypes;
 
 export default RecordingCenter;
