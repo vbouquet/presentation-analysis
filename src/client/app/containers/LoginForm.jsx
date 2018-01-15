@@ -1,6 +1,7 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import Button from 'material-ui/Button';
 import Input, { InputLabel } from 'material-ui/Input';
@@ -36,6 +37,14 @@ const mapDispatchToProps = dispatch => {
     }
   };
 };
+
+const propTypes = {
+  isLoggedIn: PropTypes.bool.isRequired,
+  actions: PropTypes.shape({
+    login: PropTypes.func.isRequired,
+    changeMenuTitle: PropTypes.func.isRequired
+  })
+}
 
 class LoginForm extends React.Component {
   constructor(props){
@@ -133,5 +142,6 @@ class LoginForm extends React.Component {
 }
 
 LoginForm = connect(mapStateToProps, mapDispatchToProps)(LoginForm);
+LoginForm.propTypes = propTypes;
 
 export default withStyles(styles)(LoginForm);

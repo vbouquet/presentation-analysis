@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import Grid from 'material-ui/Grid';
 import { changeMenuTitle } from '../actions/index';
 
@@ -11,6 +12,12 @@ const mapDispatchToProps = dispatch => {
     }
   };
 };
+
+const propTypes = {
+  actions: PropTypes.shape({
+    changeMenuTitle: PropTypes.func.isRequired
+  })
+}
 
 class Home extends React.Component {
   constructor(props) {
@@ -49,5 +56,6 @@ class Home extends React.Component {
 }
 
 Home = connect(null, mapDispatchToProps)(Home);
+Home.propTypes = propTypes;
 
 export default Home;

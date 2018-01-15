@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import Main from './Main.jsx';
 import MenuAppBar from '../components/MenuAppBar.jsx';
 
@@ -9,6 +10,10 @@ const mapStateToProps = state => {
       menuTitle: state.appContext.menuTitle
   };
 };
+
+const propTypes = {
+  menuTitle: PropTypes.string.isRequired
+}
 
 class App extends React.Component {
   render () {
@@ -22,5 +27,6 @@ class App extends React.Component {
 }
 
 App = withRouter(connect(mapStateToProps, null)(App));
+App.propTypes = propTypes;
 
 export default App;

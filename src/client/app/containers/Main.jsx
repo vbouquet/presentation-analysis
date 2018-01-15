@@ -6,18 +6,18 @@ import Home from './Home.jsx';
 import LoginForm from './LoginForm.jsx';
 import RecordingCenter from './RecordingCenter.jsx';
 
+const mapStateToProps = state => {
+  return {
+    isLoggedIn: state.userAuth.isLoggedIn
+  };
+};
+
 const propTypes = {
   isLoggedIn: PropTypes.bool.isRequired
 };
 
 const defaultProps = {
   isLoggedIn: false
-};
-
-const mapStateToProps = state => {
-  return {
-    isLoggedIn: state.userAuth.isLoggedIn
-  };
 };
 
 class Main extends React.Component {
