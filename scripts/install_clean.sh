@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
 # Clean-up installation
 
-apt-get autoremove -y
+sudo apt-get autoremove -y
+exit 0

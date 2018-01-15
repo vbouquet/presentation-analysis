@@ -1,0 +1,26 @@
+language: python
+os: linux
+dist: trusty
+sudo: required
+
+python:
+  - 3.5
+
+install:
+  - ls -l
+  - sudo chmod -R +x ./scripts/
+  - sudo ./scripts/install.sh
+  - sudo ./scripts/install_front_end.sh
+  - sudo ./scripts/install_django_server.sh
+  - sudo ./scripts/install_opencv.sh
+  - sudo ./scripts/install_clean.sh
+
+before_script:
+  - sudo chmod -R +x ./test
+
+script:
+  - ./test/test.sh
+
+notifications:
+  email: false
+  slack: psi-miage:LvhaFh7ES6JTOVLILto5OF3Y

@@ -57,3 +57,9 @@ vagrant ssh
 python3.5 $DJANGO_DIR/manage.py makemigrations
 python3.5 $DJANGO_DIR/manager.py migrate
 ```
+
+### Administrateur
+
+* url: http://www.localhost:8000/admin
+* username: admin
+* password: admin

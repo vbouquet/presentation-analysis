@@ -1,7 +1,6 @@
-import React                from 'react';
-import ReactDOM             from 'react-dom';
-import Camera               from './Camera.jsx';
-import Button               from 'material-ui/Button';
+import React from 'react';
+import Button from 'material-ui/Button';
+import Camera from './Camera.jsx';
 
 
 navigator.getUserMedia =  navigator.getUserMedia ||

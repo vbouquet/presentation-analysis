@@ -1,15 +1,18 @@
-import React                from 'react';
-import ReactDOM             from 'react-dom';
+import React from 'react';
 
-class Camera extends React.Component {
-  render() {
-    return (
-      <div className="component-camera">
-        <video className="video-live-streaming"
-          autoPlay="true" controls src={this.props.src} />
-      </div>
-    )
-  }
+const propTypes = {
+  src: PropTypes
+};
+
+function Camera({ src }) {
+  return (
+    <div className="component-camera">
+      <video className="video-live-streaming"
+        autoPlay="true" controls src={src} />
+    </div>
+  );
 }
+
+Camera.propTypes = propTypes;
 
 export default Camera;

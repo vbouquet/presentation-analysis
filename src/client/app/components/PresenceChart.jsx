@@ -1,6 +1,5 @@
-import React, {Component}   from 'react';
-import ReactDOM             from 'react-dom';
-import SimpleLineChart      from './SimpleLineChart.jsx'
+import React, {Component} from 'react';
+import SimpleLineChart from './SimpleLineChart.jsx'
 
 class PresenceChart extends React.Component {
   constructor(props){
@@ -49,7 +48,7 @@ class PresenceChart extends React.Component {
     const active = this.props.active;
     if (active)
       return (
-        <SimpleLineChart data={this.state.data} />
+        <SimpleLineChart data={this.state.data}  />
       );
     else {
       return (
