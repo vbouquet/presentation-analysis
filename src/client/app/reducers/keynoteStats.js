@@ -20,8 +20,8 @@ function keynoteStats(state = initialState, action) {
         attendanceData: [
           ...state.attendanceData,
           {
-            "time": action.time,
-            "people": action.people
+            time: action.time,
+            attendees: action.attendees
           }
         ]
       });
@@ -30,8 +30,8 @@ function keynoteStats(state = initialState, action) {
         attentivenessData: [
           ...state.attentivenessData,
           {
-            "time": action.time,
-            "attention": action.attention
+            time: action.time,
+            attention: action.attention
           }
         ]
       });

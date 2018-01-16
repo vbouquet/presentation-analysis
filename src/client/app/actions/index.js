@@ -36,9 +36,9 @@ export function changeMenuTitle(title) {
     return { type: CHANGE_MENU_TITLE, title: title};
 }
 
-export function addAttendanceStats(time, attendance) {
+export function addAttendanceStats(time, attendees) {
     console.log("Action: addAttendanceStats");
-    return { type: ADD_ATTENDANCE_STATS, time: time, attendance: attendance};
+    return { type: ADD_ATTENDANCE_STATS, time: time, attendees: attendees};
 }
 
 export function addAttentivenessStats(time, attention) {

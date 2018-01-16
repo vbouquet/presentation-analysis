@@ -14,19 +14,20 @@ const propTypes = {
 
 const defaultProps = {
   data: [
+    {"x": 5, "y": 0},
     {"x": 10, "y": 1},
   ],
   label: "x",
   color: "gree",
   fillColorByValue: false,
-}
+};
 
 class SimpleAreaChart extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       fillColorByValue: false,
-    }
+    };
     this.gradientOffset = this.gradientOffset.bind(this);
   }
 

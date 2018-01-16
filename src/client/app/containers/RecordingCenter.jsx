@@ -52,11 +52,14 @@ class RecordingCenter extends React.Component {
     this.state = {
       title: "Recording center - Realtime keynote analysis",
       cancelRecording: false,
-    }
+      timeStart: null,
+      time: "0:0:0"
+    };
 
     this.handleOpen = this.handleOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.stopRecording = this.stopRecording.bind(this);
+    this.recordTime = this.recordTime.bind(this);
   }
 
   componentDidMount() {
@@ -72,10 +75,29 @@ class RecordingCenter extends React.Component {
 
   handleOpen() {
     this.props.actions.startRecording();
+    this.setState({
+      timeStart: new Date()
+    }, () => { setInterval(() => this.recordTime(), 5000); });
   }
 
   handleClose() {
-    this.setState({ cancelRecording: true });
+    this.setState({
+      cancelRecording: true,
+      timeStart: null,
+      time: "0:0:0"
+    });
+  }
+
+  recordTime() {
+    console.log("Record Time");
+    const currentTime = new Date();
+    let timeDiff = (currentTime - this.state.timeStart) / 1000;
+    const seconds = Math.round(timeDiff % 60);
+    timeDiff = Math.floor(timeDiff / 60);
+    const minutes = Math.round(timeDiff % 60);
+    timeDiff = Math.floor(timeDiff / 60);
+    const hours = Math.round(timeDiff % 24);
+    this.setState({time: hours + ":" + minutes + ":" + seconds});
   }
 
   stopRecording() {
@@ -148,7 +170,7 @@ class RecordingCenter extends React.Component {
                 <Typography type="headline" component="h3">
                   Live board
                 </Typography>
-                <KeynoteGeneralStat />
+                <KeynoteGeneralStat time={this.state.time}/>
               </Grid>
             </Paper>
           </Grid>

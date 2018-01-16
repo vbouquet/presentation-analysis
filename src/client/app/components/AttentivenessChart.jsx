@@ -33,8 +33,6 @@ class AttentivenessChart extends React.Component {
     this.state = {
       active: true,
       time: 0,
-      increment: 1,
-      xAxisId: "time",
       yAxisId: "attention",
     };
   }
@@ -44,10 +42,7 @@ class AttentivenessChart extends React.Component {
   }
 
   componentDidMount() {
-    this.timerID = setInterval(
-      () => this.tick(),
-      4000,
-    );
+    this.timerID = setInterval(() => this.tick(), 5000);
   }
 
   componentWillUnmount() {
@@ -55,17 +50,7 @@ class AttentivenessChart extends React.Component {
   }
 
   tick() {
-    this.props.actions.addData(this.state.time, this.randomData());
-    // this.setState((prevState, props) => ({
-    //   time: prevState.time + prevState.increment,
-    //   data: [
-    //     ...prevState.data,
-    //     {
-    //       "time": prevState.time + prevState.increment,
-    //       "attention": this.randomData()
-    //     }
-    //   ]
-    // }), () => { /* console.log(this.state) */ });
+    this.props.actions.addData(this.state.time+1, this.randomData());
   }
 
   render() {
