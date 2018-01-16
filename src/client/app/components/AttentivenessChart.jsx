@@ -1,6 +1,22 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { addAttentivenessStats } from '../actions';
 import SimpleAreaChart from './SimpleAreaChart.jsx'
+
+const mapStateToProps = state => {
+  return {
+    data: state.keynoteStats.attentivenessData
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    actions: {
+      addData: (time, attention) => dispatch(addAttentivenessStats(time, attention))
+    }
+  };
+};
 
 const propTypes = {
   color: PropTypes.string.isRequired,
@@ -9,22 +25,17 @@ const propTypes = {
 const defaultProps = {
   color: "#8884d8",
   syncId: null
-}
+};
 
 class AttentivenessChart extends React.Component {
   constructor(props){
     super(props);
     this.state = {
       active: true,
-      time: 4,
+      time: 0,
       increment: 1,
       xAxisId: "time",
       yAxisId: "attention",
-      data: [
-        {"time": 0, "attention": 45},
-        {"time": 1, "attention": -20},
-        {"time": 2, "attention": 10},
-      ]
     };
   }
 
@@ -44,16 +55,17 @@ class AttentivenessChart extends React.Component {
   }
 
   tick() {
-    this.setState((prevState, props) => ({
-      time: prevState.time + prevState.increment,
-      data: [
-        ...prevState.data,
-        {
-          "time": prevState.time + prevState.increment,
-          "attention": this.randomData()
-        }
-      ]
-    }), () => { /* console.log(this.state) */ });
+    this.props.actions.addData(this.state.time, this.randomData());
+    // this.setState((prevState, props) => ({
+    //   time: prevState.time + prevState.increment,
+    //   data: [
+    //     ...prevState.data,
+    //     {
+    //       "time": prevState.time + prevState.increment,
+    //       "attention": this.randomData()
+    //     }
+    //   ]
+    // }), () => { /* console.log(this.state) */ });
   }
 
   render() {
@@ -63,7 +75,7 @@ class AttentivenessChart extends React.Component {
     const label = this.state.yAxisId;
     if (active)
       return (
-        <SimpleAreaChart data={this.state.data} label={label} color={color}
+        <SimpleAreaChart data={this.props.data} label={label} color={color}
                          syncId={syncId} fillColorByValue
         />
       );
@@ -77,6 +89,7 @@ class AttentivenessChart extends React.Component {
   }
 }
 
+AttentivenessChart = connect(mapStateToProps, mapDispatchToProps)(AttentivenessChart);
 AttentivenessChart.propTypes = propTypes;
 AttentivenessChart.defaultProps = defaultProps;
 
