@@ -10,6 +10,7 @@ import Dialog,
 import Button from 'material-ui/Button';
 import Typography from 'material-ui/Typography';
 import PresenceChart from '../components/PresenceChart.jsx';
+import AttentivenessChart from '../components/AttentivenessChart.jsx';
 import CameraRecorder from '../components/CameraRecorder.jsx';
 import KeynoteGeneralStat from '../components/KeynoteGeneralStat.jsx';
 import { changeMenuTitle, startRecording, stopRecording } from '../actions';
@@ -160,7 +161,7 @@ class RecordingCenter extends React.Component {
               <Typography type="headline" component="h3">
                   Attendance
               </Typography>
-              <PresenceChart active={isRecording} color="#82ca9d" />
+              <PresenceChart active={isRecording} syncId="recording-center-charts" />
             </Paper>
           </Grid>
 
@@ -169,7 +170,7 @@ class RecordingCenter extends React.Component {
               <Typography type="headline" component="h3">
                   Attentiveness
               </Typography>
-              <PresenceChart active={isRecording} color="#8884d8" />
+              <AttentivenessChart active={isRecording} syncId="recording-center-charts" />
             </Paper>
           </Grid>
           <Grid item xs={1} sm={1} md={1} xl={2}/>

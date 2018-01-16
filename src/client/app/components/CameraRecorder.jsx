@@ -16,11 +16,11 @@ class CameraRecorder extends React.Component {
       stream: null,
     };
 
-    this.startRecording         = this.startRecording.bind(this);
-    this.stopRecording          = this.stopRecording.bind(this);
-    this.loadUserMedia          = this.loadUserMedia.bind(this);
-    this.setUpUserMedia         = this.setUpUserMedia.bind(this);
-    this.handleUserMediaError   = this.handleUserMediaError.bind(this);
+    this.startRecording = this.startRecording.bind(this);
+    this.stopRecording = this.stopRecording.bind(this);
+    this.loadUserMedia = this.loadUserMedia.bind(this);
+    this.setUpUserMedia = this.setUpUserMedia.bind(this);
+    this.handleUserMediaError = this.handleUserMediaError.bind(this);
   }
 
   /**
@@ -37,6 +37,7 @@ class CameraRecorder extends React.Component {
     } else {
       this.loadUserMedia();
     }
+    this.timerID = setInterval(() => console.log(this.state.stream), 4000);
   }
 
   componentWillUnmount() {

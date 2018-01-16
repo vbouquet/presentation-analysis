@@ -8,6 +8,7 @@ const propTypes = {
 
 const defaultProps = {
   color: "#82ca9d",
+  syncId: null
 }
 
 class PresenceChart extends React.Component {
@@ -20,13 +21,15 @@ class PresenceChart extends React.Component {
       xAxisId: "time",
       yAxisId: "people",
       data: [
-        {"time": 0, "people": 100}
+        {"time": 0, "people": 25},
+        {"time": 1, "people": 35},
+        {"time": 2, "people": 30},
       ]
     };
   }
 
   randomData() {
-    return Math.floor(Math.random() * (100-0) + 1)
+    return Math.floor(Math.random() * (100) + 1)
   }
 
   componentDidMount() {
@@ -50,16 +53,17 @@ class PresenceChart extends React.Component {
           "people": this.randomData()
         }
       ]
-    }), () => { console.log(this.state)});
+    }), () => { /*console.log(this.state)*/ });
   }
 
   render() {
     const { active } = this.props;
     const { color } = this.props;
+    const { syncId } = this.props;
     const label = this.state.yAxisId;
     if (active)
       return (
-        <SimpleAreaChart data={this.state.data} label={label} color={color}/>
+        <SimpleAreaChart data={this.state.data} label={label} color={color} syncId={syncId}/>
       );
     else {
       return (
