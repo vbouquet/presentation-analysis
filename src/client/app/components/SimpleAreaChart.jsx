@@ -1,46 +1,35 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {
   AreaChart, Area, Line, XAxis, YAxis, CartesianGrid, Tooltip,
   ResponsiveContainer, Legend
 } from 'recharts';
-import PropTypes from 'prop-types';
 
 const propTypes = {
   data: PropTypes.any.isRequired,
-  xLabel: PropTypes.string.isRequired,
-  yLabel: PropTypes.string.isRequired,
-};
-
-const defaultProps = {
-  data: [
-    {"time": 0, "people": 100}
-  ],
-  xLabel: "time",
-  yLabel: "people"
+  label: PropTypes.string.isRequired,
+  color: PropTypes.string.isRequired,
 };
 
 class SimpleAreaChart extends React.Component {
   render() {
     const { data } = this.props;
-    const { yLabel } = this.props;
+    const { label } = this.props;
+    const { color } = this.props;
 
     return (
-    <div>
-      <ResponsiveContainer height={200}>
-        <AreaChart
-          data={data}
-          margin={{top: 10, right: 20, left: 20, bottom: 0}}
-        >
-          <Tooltip />
-          <Area type='monotone' dataKey={yLabel} stroke='#82ca9d' fill='#82ca9d' />
-        </AreaChart >
-      </ResponsiveContainer >
-    </div>
-  );
-}
+      <div>
+        <ResponsiveContainer height={200}>
+          <AreaChart data={data} margin={{top: 10, right: 20, left: 20, bottom: 0}}>
+            <Tooltip />
+            <Area type='monotone' dataKey={label} stroke={color} fill={color} />
+          </AreaChart >
+        </ResponsiveContainer >
+      </div>
+    );
+  }
 }
 
-SimpleLineChart.propTypes = propTypes;
-SimpleLineChart.defaultProps = defaultProps;
+SimpleAreaChart.propTypes = propTypes;
 
-export default SimpleLineChart;
+export default SimpleAreaChart;

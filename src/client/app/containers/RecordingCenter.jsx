@@ -1,17 +1,40 @@
 import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { withStyles } from 'material-ui/styles';
 import Grid from 'material-ui/Grid';
 import Paper from 'material-ui/Paper';
+import Dialog,
+{ DialogActions, DialogContent, DialogContentText, DialogTitle } from 'material-ui/Dialog';
+import Button from 'material-ui/Button';
+import Typography from 'material-ui/Typography';
 import PresenceChart from '../components/PresenceChart.jsx';
 import CameraRecorder from '../components/CameraRecorder.jsx';
-import { changeMenuTitle } from '../actions';
+import KeynoteGeneralStat from '../components/KeynoteGeneralStat.jsx';
+import { changeMenuTitle, startRecording, stopRecording } from '../actions';
+
+const styles = theme => ({
+  paper: {
+    paddingTop: 16,
+    paddingBottom: 16,
+    paddingLeft: 20,
+    paddingRight: 20,
+  },
+});
+
+const mapStateToProps = state => {
+  return {
+    isRecording: state.recordingCenter.isRecording,
+  };
+};
 
 const mapDispatchToProps = dispatch => {
   return {
     actions: {
-      changeMenuTitle: title => dispatch(changeMenuTitle(title))
+      changeMenuTitle: title => dispatch(changeMenuTitle(title)),
+      startRecording: () => dispatch(startRecording()),
+      stopRecording: () => dispatch(stopRecording()),
     }
   };
 };
@@ -26,8 +49,13 @@ class RecordingCenter extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      title: "Recording center - Realtime keynote analysis"
+      title: "Recording center - Realtime keynote analysis",
+      cancelRecording: false,
     }
+
+    this.handleOpen = this.handleOpen.bind(this);
+    this.handleClose = this.handleClose.bind(this);
+    this.stopRecording = this.stopRecording.bind(this);
   }
 
   componentDidMount() {
@@ -36,24 +64,115 @@ class RecordingCenter extends React.Component {
     this.props.actions.changeMenuTitle(title);
   }
 
+  componentWillUnmount() {
+    this.props.actions.stopRecording();
+    this.setState({ cancelRecording: false });
+  }
+
+  handleOpen() {
+    this.props.actions.startRecording();
+  }
+
+  handleClose() {
+    this.setState({ cancelRecording: true });
+  }
+
+  stopRecording() {
+    this.props.actions.stopRecording();
+    this.setState({ cancelRecording: true });
+    // TODO Forward to a summary of the keynote instead
+  }
+
   render() {
+    const { classes } = this.props;
+    const { isRecording } = this.props;
+    const { cancelRecording } = this.state;
+
+    // If user canceled recording
+    if (cancelRecording) {
+      return (
+        <Redirect to="/home" />
+      )
+    }
+    // If not recording yet, ask the user if he wants to start the analysis
+    if (!isRecording) {
+      return (
+        <div>
+          <Dialog open>
+            <DialogTitle id="start-recording-title">Start recording ?</DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                If you continue the live keynote analysis will start now.<br/>
+                Make sure your browser is up-to-date and that your camera is properly setup.
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={this.handleClose}>
+                Cancel
+              </Button>
+              <Button onClick={this.handleOpen} raised color="primary" autoFocus>
+                Start
+              </Button>
+            </DialogActions>
+          </Dialog>
+        </div>
+      )
+    }
+    // User press start recording
     return (
       <div className="component-recording-center">
-        <Grid container direction="row">
-          <Grid item xs={2}/>
-          <Grid item xs={8}>
-            <Paper>
-              <CameraRecorder />
+        <br/><br/><br/><br/>
+        <Grid container className="recording-center-grid">
+
+          {/* Camera controls */}
+          <Grid item xs={1} sm={1} md={1} xl={2}/>
+          <Grid item xs={4} sm={4} md={4} xl={3}>
+            <Paper className={classes.paper} elevation={6}>
+              <Grid container>
+                <Typography type="headline" component="h3">
+                  Live recording
+                </Typography>
+                <CameraRecorder isRecording={isRecording} />
+                <Button className="button-recording-stop" raised color="accent"
+                  onClick={this.stopRecording}>
+                  Stop recording
+                </Button>
+              </Grid>
             </Paper>
           </Grid>
-          <Grid item xs={1}/>
-          <Grid item xs={12} />
-          <Grid item xs={12} />
-          <Grid item xs={6}>
-            <Paper style={{height: 240}}>
-              <PresenceChart />
+          {/* Live board stats*/}
+          <Grid item xs={6} sm={6} md={6} xl={5}>
+            <Paper className={classes.paper} elevation={6}>
+              <Grid container>
+                <Typography type="headline" component="h3">
+                  Live board
+                </Typography>
+                <KeynoteGeneralStat />
+              </Grid>
             </Paper>
           </Grid>
+          <Grid item xs={1} sm={1} md={1} xl={2}/>
+
+          {/* Presence chart */}
+          <Grid item xs={1} sm={1} md={1} xl={2}/>
+          <Grid item xs={5} sm={5} md={5} xl={4}>
+            <Paper className={classes.paper} elevation={6}>
+              <Typography type="headline" component="h3">
+                  Attendance
+              </Typography>
+              <PresenceChart active={isRecording} color="#82ca9d" />
+            </Paper>
+          </Grid>
+
+          <Grid item xs={5} sm={5} md={5} xl={4}>
+            <Paper className={classes.paper} elevation={6}>
+              <Typography type="headline" component="h3">
+                  Attentiveness
+              </Typography>
+              <PresenceChart active={isRecording} color="#8884d8" />
+            </Paper>
+          </Grid>
+          <Grid item xs={1} sm={1} md={1} xl={2}/>
 
         </Grid>
       </div>
@@ -61,7 +180,7 @@ class RecordingCenter extends React.Component {
   }
 }
 
-RecordingCenter = connect(null, mapDispatchToProps)(RecordingCenter);
+RecordingCenter = connect(mapStateToProps, mapDispatchToProps)(RecordingCenter);
 RecordingCenter.propTypes = propTypes;
 
-export default RecordingCenter;
+export default withStyles(styles)(RecordingCenter);

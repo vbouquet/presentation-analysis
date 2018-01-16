@@ -1,5 +1,14 @@
 import React, {Component} from 'react';
-import SimpleLineChart from './SimpleLineChart.jsx'
+import PropTypes from 'prop-types';
+import SimpleAreaChart from './SimpleAreaChart.jsx'
+
+const propTypes = {
+  color: PropTypes.string.isRequired,
+};
+
+const defaultProps = {
+  color: "#82ca9d",
+}
 
 class PresenceChart extends React.Component {
   constructor(props){
@@ -23,7 +32,7 @@ class PresenceChart extends React.Component {
   componentDidMount() {
     this.timerID = setInterval(
       () => this.tick(),
-      1500,
+      4000,
     );
   }
 
@@ -45,10 +54,12 @@ class PresenceChart extends React.Component {
   }
 
   render() {
-    const active = this.props.active;
+    const { active } = this.props;
+    const { color } = this.props;
+    const label = this.state.yAxisId;
     if (active)
       return (
-        <SimpleLineChart data={this.state.data}  />
+        <SimpleAreaChart data={this.state.data} label={label} color={color}/>
       );
     else {
       return (
@@ -59,5 +70,8 @@ class PresenceChart extends React.Component {
     }
   }
 }
+
+PresenceChart.propTypes = propTypes;
+PresenceChart.defaultProps = defaultProps;
 
 export default PresenceChart;

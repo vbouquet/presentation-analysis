@@ -21,6 +21,6 @@ class App extends React.Component {
   }
 }
 
-App = connect(mapStateToProps, null)(App);
+App = withRouter(connect(mapStateToProps, null)(App));
 
 export default App;

@@ -1,19 +1,17 @@
 import React from 'react';
-import PropTypes from 'prop-types'
-
-const propTypes = {
-  src: PropTypes
-};
+import { CircularProgress } from 'material-ui/Progress';
 
 function Camera({ src }) {
   return (
     <div className="component-camera">
-      <video className="video-live-streaming"
-        autoPlay="true" controls src={src} />
+      {src ? (
+        <video className="video-live-streaming"
+          autoPlay="true" controls src={src} width="100%" height="auto"/>
+      ) : (
+        <CircularProgress />
+      )}
     </div>
   );
 }
-
-Camera.propTypes = propTypes;
 
 export default Camera;

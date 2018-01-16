@@ -1,5 +1,4 @@
 import React from 'react';
-import Button from 'material-ui/Button';
 import Camera from './Camera.jsx';
 
 
@@ -12,10 +11,9 @@ class CameraRecorder extends React.Component {
     super(props);
 
     this.state = {
-      isRecording:    false,
-      mediaRecorder:  null,
-      src:            null,
-      upLoading:      false,
+      isRecording: false,
+      mediaRecorder: null,
+      stream: null,
     };
 
     this.startRecording         = this.startRecording.bind(this);
@@ -33,11 +31,16 @@ class CameraRecorder extends React.Component {
     console.log("componentDidMount");
     if (!navigator.getUserMedia) {
       alert("Votre navigateur ne prend pas en charge l'enregistrement \
-             de la webcam. Veuillez utiliser un navigateur récent comme \
+             de la video par votre webcam depuis le navigateur. \
+             Veuillez utiliser un navigateur récent comme \
              Chrome ou Firefox.");
     } else {
       this.loadUserMedia();
     }
+  }
+
+  componentWillUnmount() {
+    this.stopRecording();
   }
 
   /**
@@ -49,7 +52,8 @@ class CameraRecorder extends React.Component {
     navigator.mediaDevices
       .getUserMedia(mediaConstraints)
       .then(this.setUpUserMedia)
-      .catch(this.handleUserMediaError)
+      .then(this.startRecording)
+      .catch(this.handleUserMediaError);
   }
 
   /**
@@ -99,7 +103,6 @@ class CameraRecorder extends React.Component {
       this.setState({
         isRecording: false,
         stream: "",
-        msg: "ON STOP TOUT"
       }, () => {
         console.log("Recording offline!");
         console.log(this.state);
@@ -111,15 +114,6 @@ class CameraRecorder extends React.Component {
     return (
       <div className="component-recorder">
         <Camera src={this.state.stream} />
-        {/*Add space */}
-        <Button className="button-recording-start" raised color="primary"
-          onClick={this.startRecording}>
-          Record
-        </Button>
-        <Button className="button-recording-stop" raised color="accent"
-          onClick={this.stopRecording}>
-          Stop
-        </Button>
       </div>
     )
   }
