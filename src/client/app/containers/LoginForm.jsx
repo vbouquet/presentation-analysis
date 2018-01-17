@@ -1,6 +1,7 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import Button from 'material-ui/Button';
 import Input, { InputLabel } from 'material-ui/Input';
@@ -24,7 +25,7 @@ const styles = theme => ({
 
 const mapStateToProps = state => {
   return {
-      isLoggedIn: state.userAuth.isLoggedIn,
+    isLoggedIn: state.userAuth.isLoggedIn,
   };
 };
 
@@ -37,13 +38,24 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
+const propTypes = {
+  isLoggedIn: PropTypes.bool.isRequired,
+  actions: PropTypes.shape({
+    login: PropTypes.func.isRequired,
+    changeMenuTitle: PropTypes.func.isRequired
+  })
+}
+
+const defaultProps = {
+  isLoggedIn: false
+};
+
 class LoginForm extends React.Component {
   constructor(props){
     super(props);
     this.state = {
       username: "",
       password: "",
-      isLoggedIn: false,
       title: "Login - Realtime keynote analysis"
     };
     this.handleInputChange  = this.handleInputChange.bind(this);
@@ -68,17 +80,14 @@ class LoginForm extends React.Component {
     const { username } = this.state;
     if (username.length > 2) {
       this.props.actions.login({ username });
-      this.setState({
-        isLoggedIn: true
-      });
     }
   }
 
   render() {
     const { classes } = this.props;
     const { from } = this.props.location.state || { from: { pathname: '/' }};
-    if (this.state.isLoggedIn) {
-      console.log("LoginForm => Redirecto to " + from.pathname);
+    if (this.props.isLoggedIn) {
+      console.log("LoginForm => Redirect to " + from.pathname);
       return (
         <Redirect to={from} />
       )
@@ -133,5 +142,7 @@ class LoginForm extends React.Component {
 }
 
 LoginForm = connect(mapStateToProps, mapDispatchToProps)(LoginForm);
+LoginForm.propTypes = propTypes;
+LoginForm.defaultProps = defaultProps;
 
 export default withStyles(styles)(LoginForm);

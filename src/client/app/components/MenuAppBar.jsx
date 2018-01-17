@@ -24,6 +24,11 @@ const styles = theme => ({
   },
 });
 
+const propTypes = {
+  classes: PropTypes.object.isRequired,
+  title: PropTypes.string.isRequired
+}
+
 class MenuAppBar extends React.Component {
   constructor(props){
     super(props);
@@ -95,8 +100,6 @@ class MenuAppBar extends React.Component {
   }
 }
 
-MenuAppBar.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
+MenuAppBar.propTypes = propTypes;
 
 export default withStyles(styles)(MenuAppBar);
