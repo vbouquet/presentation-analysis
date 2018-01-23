@@ -1,6 +1,6 @@
 {
   "name": "psi-javascript",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "PSI Front-end template",
   "main": "index.js",
   "scripts": {
