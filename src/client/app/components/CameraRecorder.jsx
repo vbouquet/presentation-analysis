@@ -1,6 +1,6 @@
-import React                from 'react';
-import ReactDOM             from 'react-dom';
-import Camera               from './Camera.jsx';
+import React from 'react';
+import Camera from './Camera.jsx';
+
 
 navigator.getUserMedia =  navigator.getUserMedia ||
                           navigator.webkitGetUserMedia ||
@@ -11,17 +11,16 @@ class CameraRecorder extends React.Component {
     super(props);
 
     this.state = {
-      isRecording:    false,
-      mediaRecorder:  null,
-      src:            null,
-      upLoading:      false,
+      isRecording: false,
+      mediaRecorder: null,
+      stream: null,
     };
 
-    this.startRecording         = this.startRecording.bind(this);
-    this.stopRecording          = this.stopRecording.bind(this);
-    this.loadUserMedia          = this.loadUserMedia.bind(this);
-    this.setUpUserMedia         = this.setUpUserMedia.bind(this);
-    this.handleUserMediaError   = this.handleUserMediaError.bind(this);
+    this.startRecording = this.startRecording.bind(this);
+    this.stopRecording = this.stopRecording.bind(this);
+    this.loadUserMedia = this.loadUserMedia.bind(this);
+    this.setUpUserMedia = this.setUpUserMedia.bind(this);
+    this.handleUserMediaError = this.handleUserMediaError.bind(this);
   }
 
   /**
@@ -32,11 +31,17 @@ class CameraRecorder extends React.Component {
     console.log("componentDidMount");
     if (!navigator.getUserMedia) {
       alert("Votre navigateur ne prend pas en charge l'enregistrement \
-             de la webcam. Veuillez utiliser un navigateur récent comme \
+             de la video par votre webcam depuis le navigateur. \
+             Veuillez utiliser un navigateur récent comme \
              Chrome ou Firefox.");
     } else {
       this.loadUserMedia();
     }
+    this.timerID = setInterval(() => console.log(this.state.stream), 4000);
+  }
+
+  componentWillUnmount() {
+    this.stopRecording();
   }
 
   /**
@@ -48,7 +53,8 @@ class CameraRecorder extends React.Component {
     navigator.mediaDevices
       .getUserMedia(mediaConstraints)
       .then(this.setUpUserMedia)
-      .catch(this.handleUserMediaError)
+      .then(this.startRecording)
+      .catch(this.handleUserMediaError);
   }
 
   /**
@@ -98,7 +104,6 @@ class CameraRecorder extends React.Component {
       this.setState({
         isRecording: false,
         stream: "",
-        msg: "ON STOP TOUT"
       }, () => {
         console.log("Recording offline!");
         console.log(this.state);
@@ -110,15 +115,6 @@ class CameraRecorder extends React.Component {
     return (
       <div className="component-recorder">
         <Camera src={this.state.stream} />
-        <br/>
-        <button className="button-recording-start"
-          onClick={this.startRecording}>
-          Start Recording
-        </button>
-        <button className="button-recording-stop"
-          onClick={this.stopRecording}>
-          Stop Recording
-        </button>
       </div>
     )
   }

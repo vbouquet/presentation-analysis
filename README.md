@@ -16,7 +16,8 @@ Oussemo Oulhaci - <oussem93@hotmail.fr>
 * Webpack: Javascript module bundler.
 * Babel: Transpiling code for new languages features.
 * React: MVC Framework for dynamic statefull web pages.
-* Express: Basic server in javascript (for front-end testing).
+* Redux: State container for Javascript apps.
+* Express: Basic nodejs server (for front-end testing).
 * Django-rest: Framework for building web API.
 * OpenCV: Computer vision and machine learning library.
 

@@ -1,15 +1,17 @@
-import React                from 'react';
-import ReactDOM             from 'react-dom';
+import React from 'react';
+import { CircularProgress } from 'material-ui/Progress';
 
-class Camera extends React.Component {
-  render() {
-    return (
-      <div className="component-camera">
+function Camera({ src }) {
+  return (
+    <div className="component-camera">
+      {src ? (
         <video className="video-live-streaming"
-          autoPlay="true" controls src={this.props.src} />
-      </div>
-    )
-  }
+          autoPlay="true" controls src={src} width="100%" height="auto"/>
+      ) : (
+        <CircularProgress />
+      )}
+    </div>
+  );
 }
 
 export default Camera;

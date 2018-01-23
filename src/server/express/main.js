@@ -1,11 +1,12 @@
 var express = require('express');
+var path = require('path');
 
 const app = express();
 const port = 8080;
 
 app.use('/', express.static("/vagrant/src/client"));
 app.get('*', function(req, res) {
-  res.sendFile(path.join(__dirname, 'index.html'));
+  res.sendFile("/vagrant/src/client/index.html");
 });
 
 app.listen(port, '0.0.0.0');
