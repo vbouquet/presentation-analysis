@@ -89,7 +89,6 @@ class RecordingCenter extends React.Component {
   }
 
   recordTime() {
-    console.log("Record Time");
     const currentTime = new Date();
     let timeDiff = (currentTime - this.state.timeStart) / 1000;
     const seconds = Math.round(timeDiff % 60);
@@ -155,6 +154,7 @@ class RecordingCenter extends React.Component {
                 <Typography type="headline" component="h3">
                   Live recording
                 </Typography>
+                <br />
                 <CameraRecorder isRecording={isRecording} />
                 <Button className="button-recording-stop" raised color="accent"
                   onClick={this.stopRecording}>

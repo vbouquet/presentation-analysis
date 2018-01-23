@@ -87,7 +87,6 @@ class LoginForm extends React.Component {
     const { classes } = this.props;
     const { from } = this.props.location.state || { from: { pathname: '/' }};
     if (this.props.isLoggedIn) {
-      console.log("LoginForm => Redirect to " + from.pathname);
       return (
         <Redirect to={from} />
       )
