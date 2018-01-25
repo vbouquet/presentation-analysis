@@ -3,9 +3,9 @@ from django.db import models
 from django.dispatch import receiver
 from rest_framework.parsers import MultiPartParser
 
-from snippets_example.models import Snippet
-from snippets_example.serializers import SnippetSerializer
-from rest_framework import viewsets, status
+from .models import Snippet
+from .serializers import SnippetSerializer
+from rest_framework import viewsets
 
 
 # ModelViewSet provide default crud operations

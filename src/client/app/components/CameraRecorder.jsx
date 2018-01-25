@@ -12,8 +12,21 @@ class CameraRecorder extends React.Component {
 
     this.state = {
       isRecording: false,
+      // Utilitaire pour enregistrer la video/audio https://developer.mozilla.org/en-US/docs/Web/API/MediaRecorder
       mediaRecorder: null,
+      // Temps entre chaque segment video/audio enregistré (ms)
+      timeBetweenVideoSlice: 5000,
+      // MediaStream objet
       stream: null,
+      // Segment de video/audio enregistrés
+      chunks: [],
+      // Les options d'enregistrement de MediaRecorder
+      options: {
+        // Format de la video
+        mimeType: "video/webm",
+        // Qualité de la vidéo et de l'audio (700 KB/s)
+        bitsPerSecond: 700000
+      },
     };
 
     this.startRecording = this.startRecording.bind(this);
@@ -24,8 +37,8 @@ class CameraRecorder extends React.Component {
   }
 
   /**
-   * On component mount, verify if navigator support userMedia for recording
-   * audio and video from hardware (webcam).
+   * Lorsque le composant est monté, vérifie que le navigateur supporte l'enregistrement video
+   * et audio grâce à MediaRecorder
    */
   componentDidMount() {
     console.log("componentDidMount");
@@ -37,7 +50,6 @@ class CameraRecorder extends React.Component {
     } else {
       this.loadUserMedia();
     }
-    this.timerID = setInterval(() => console.log(this.state.stream), 4000);
   }
 
   componentWillUnmount() {
@@ -45,11 +57,11 @@ class CameraRecorder extends React.Component {
   }
 
   /**
-   * Load video and audio from hardware
+   * Chargement de la video et de l'audio
    */
   loadUserMedia() {
     console.log("loadUserMedia");
-    var mediaConstraints = {audio: true, video: true};
+    let mediaConstraints = {audio: true, video: true};
     navigator.mediaDevices
       .getUserMedia(mediaConstraints)
       .then(this.setUpUserMedia)
@@ -59,24 +71,16 @@ class CameraRecorder extends React.Component {
 
   /**
    * On getUserMedia success, MediaRecorder from stream
-   * @param {Stream of video} stream
    */
   setUpUserMedia(stream) {
     console.log("setUpUserMedia");
-    var options = { mimeType : 'video/webm' };
-    var mediaRecorder = new MediaRecorder(stream, options);
+    const { options } = this.state;
+    let mediaRecorder = new MediaRecorder(stream, options);
     this.setState({
       mediaRecorder: mediaRecorder,
-    }, () => {
-      console.log("loadUserMedia: success !");
-      console.log(this.state);
     });
   }
 
-  /**
-   * On getUserMedia error
-   * @param {getUserMedia error} err
-   */
   handleUserMediaError(err) {
     console.log("handleUserMediaError");
     console.log("loadUserMedia: failure   !");
@@ -84,15 +88,45 @@ class CameraRecorder extends React.Component {
   }
 
   startRecording() {
-    console.log("startRecording");
-    if (!this.state.isRecording) {
-      this.state.mediaRecorder.start();
+    const { isRecording } = this.state;
+    const { mediaRecorder } = this.state;
+    const { timeBetweenVideoSlice } = this.state;
+
+    if (!isRecording) {
+      console.log("startRecording");
+      mediaRecorder.start(timeBetweenVideoSlice);
+      let stream = window.URL.createObjectURL(mediaRecorder.stream);
+
+      // Listener pour envoyer le flux audio/video au serveur par paquet
+      mediaRecorder.ondataavailable = (event) => {
+        const file = new File([event.data],
+          'video-' + (new Date).toISOString().replace(/[:.]/g, '-') + '.webm',
+          { type: 'video/webm' });
+
+        const request = new XMLHttpRequest();
+        // Requête asynchrone
+        request.addEventListener('readystatechange', listenerServerResponse);
+        request.open('POST', "http://localhost:8000/snippets/", true);
+
+        let data = new FormData();
+        data.append("title", "send-file");
+        data.append("file", file);
+        data.append("filename", file.name);
+        request.send(data);
+
+        // Réponse du serveur (asynchrone) => ISSUE NOT WORKING
+        function listenerServerResponse() {
+          console.log("ServerResponse");
+          console.log(this);
+          if (request.readyState === XMLHttpRequest.DONE && request.status === 200) {
+            console.log(this.response);
+          }
+        }
+      };
+
       this.setState({
         isRecording: true,
-        stream: window.URL.createObjectURL(this.state.mediaRecorder.stream),
-      }, () => {
-        console.log("Recording live!");
-        console.log(this.state);
+        stream: stream,
       });
     }
   }
