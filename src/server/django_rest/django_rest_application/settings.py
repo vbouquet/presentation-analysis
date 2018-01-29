@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'snippets_example',
     'rest_framework',
+    'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -40,9 +41,10 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -66,6 +68,25 @@ TEMPLATES = [
         },
     },
 ]
+
+# List of host allowed to make cross-site request.
+CORS_ORIGIN_WHITELIST = (
+    'localhost:8080',
+)
+
+# False by default. Allow cross-site request from all host.
+# If set to true, override CORS_ORIGIN_WHITELIST.
+CORS_ORIGIN_ALLOW_ALL = True
+
+# Type of request allowed.
+CORS_ALLOW_METHODS = (
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+)
 
 WSGI_APPLICATION = 'django_rest_application.wsgi.application'
 
