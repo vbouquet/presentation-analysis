@@ -71,6 +71,6 @@ def face_detection_emotion(image_path):
         draw_text(face_coordinates, rgb_image, emotion_text, color, 0, -50, 1, 2)
 
     bgr_image = cv2.cvtColor(rgb_image, cv2.COLOR_RGB2BGR)
-    cv2.imwrite('../images/predicted_test_image.png', bgr_image)
+    cv2.imwrite('../snippets_example/predicted_test_image.png', bgr_image)
 
 
