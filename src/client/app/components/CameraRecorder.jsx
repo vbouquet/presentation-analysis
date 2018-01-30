@@ -1,7 +1,6 @@
 import React from 'react';
 import Camera from './Camera.jsx';
 
-
 navigator.getUserMedia =  navigator.getUserMedia ||
                           navigator.webkitGetUserMedia ||
                           navigator.mozGetUserMedia;
@@ -12,14 +11,12 @@ class CameraRecorder extends React.Component {
 
     this.state = {
       isRecording: false,
-      // Utilitaire pour enregistrer la video/audio https://developer.mozilla.org/en-US/docs/Web/API/MediaRecorder
+      // Utilitaire pour enregistrer la video/audio (https://developer.mozilla.org/en-US/docs/Web/API/MediaRecorder)
       mediaRecorder: null,
       // Temps entre chaque segment video/audio enregistré (ms)
       timeBetweenVideoSlice: 5000,
-      // MediaStream objet
+      // Flux video comme URL Object (https://developer.mozilla.org/en-US/docs/Web/API/URL/createObjectURL)
       stream: null,
-      // Segment de video/audio enregistrés
-      chunks: [],
       // Les options d'enregistrement de MediaRecorder
       options: {
         // Format de la video
@@ -34,6 +31,7 @@ class CameraRecorder extends React.Component {
     this.loadUserMedia = this.loadUserMedia.bind(this);
     this.setUpUserMedia = this.setUpUserMedia.bind(this);
     this.handleUserMediaError = this.handleUserMediaError.bind(this);
+    this.sendVideoToServer = this.sendVideoToServer.bind(this);
   }
 
   /**
@@ -97,51 +95,60 @@ class CameraRecorder extends React.Component {
       mediaRecorder.start(timeBetweenVideoSlice);
       let stream = window.URL.createObjectURL(mediaRecorder.stream);
 
-      // Listener pour envoyer le flux audio/video au serveur par paquet
-      mediaRecorder.ondataavailable = (event) => {
-        const file = new File([event.data],
-          'video-' + (new Date).toISOString().replace(/[:.]/g, '-') + '.webm',
-          { type: 'video/webm' });
-
-        const request = new XMLHttpRequest();
-        // Requête asynchrone
-        request.addEventListener('readystatechange', listenerServerResponse);
-        request.open('POST', "http://localhost:8000/snippets/", true);
-
-        let data = new FormData();
-        data.append("title", "send-file");
-        data.append("file", file);
-        data.append("filename", file.name);
-        request.send(data);
-
-        // Réponse du serveur (asynchrone) => ISSUE NOT WORKING
-        function listenerServerResponse() {
-          console.log("ServerResponse");
-          console.log(this);
-          if (request.readyState === XMLHttpRequest.DONE && request.status === 200) {
-            console.log(this.response);
-          }
-        }
-      };
-
       this.setState({
         isRecording: true,
         stream: stream,
       });
+
+      // Listener pour envoyer le flux audio/video au serveur par paquet
+      mediaRecorder.addEventListener("dataavailable", (event) => this.sendVideoToServer(event));
     }
   }
+
+  sendVideoToServer(event) {
+    const { mediaRecorder } = this.state;
+    const { timeBetweenVideoSlice } = this.state;
+    const { mimeType } = this.state.options;
+
+    const file = new File([event.data],
+      "video-" + (new Date).toISOString().replace(/[:.]/g, '-') + ".webm",
+      { type: mimeType }
+    );
+
+    const request = new XMLHttpRequest();
+    // Ajout listener réponse de la requête (asynchrone)
+    request.addEventListener('readystatechange', listenerServerResponse);
+    request.open('POST', "http://localhost:8000/snippets/", true);
+
+    let data = new FormData();
+    data.append("title", "send-file");
+    data.append("file", file);
+    data.append("filename", file.name);
+    request.send(data);
+
+    // Réponse du serveur (asynchrone) => ISSUE NOT WORKING
+    function listenerServerResponse() {
+      console.log("ServerResponse");
+      console.log(this);
+      if (request.readyState === XMLHttpRequest.DONE && request.status === 200) {
+        console.log(this.response);
+      }
+    }
+  };
 
   stopRecording() {
     console.log("stopRecording");
     if (this.state.isRecording) {
+
       this.state.mediaRecorder.stop();
+
+      // Libère la mémoire associé au fichier video
+      window.URL.revokeObjectURL(this.state.stream);
+
       this.setState({
         isRecording: false,
         stream: "",
-      }, () => {
-        console.log("Recording offline!");
-        console.log(this.state);
-      })
+      });
     }
   }
 
