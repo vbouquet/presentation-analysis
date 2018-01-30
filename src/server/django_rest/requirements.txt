@@ -7,3 +7,4 @@ pandas==0.19.1
 numpy==1.12.1
 h5py==2.7.0
 statistics
+django-cors-headers==2.0.0

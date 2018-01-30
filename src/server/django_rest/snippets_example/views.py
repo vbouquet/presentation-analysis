@@ -2,7 +2,9 @@ import os
 from django.db import models
 from django.dispatch import receiver
 from rest_framework.parsers import MultiPartParser
+from rest_framework.response import Response
 
+from .face_detection import video_face_detection
 from .models import Snippet
 from .serializers import SnippetSerializer
 from rest_framework import viewsets
@@ -18,8 +20,13 @@ class SnippetViewSet(viewsets.ModelViewSet):
     serializer_class = SnippetSerializer
     parser_classes = (MultiPartParser,)
 
-    def perform_create(self, serializer):
-        serializer.save()
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+
+        faces_found = video_face_detection.face_detection(self.request.data.get("filename"))
+        return Response({'num_file': '', 'attendance': faces_found, 'attentiveness': ''})
 
     # Used to delete files on filesystem
     @receiver(models.signals.post_delete, sender=Snippet)
@@ -30,5 +37,3 @@ class SnippetViewSet(viewsets.ModelViewSet):
         if instance.file:
             if os.path.isfile(instance.file.path):
                 os.remove(instance.file.path)
-
-
