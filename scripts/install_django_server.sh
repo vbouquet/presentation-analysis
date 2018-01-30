@@ -22,6 +22,7 @@ sudo pip3 install --upgrade pip
 sudo pip3 install pipreqs
 
 sudo pip3 install coreapi==2.3.3
+sudo apt-get install python3-tk
 
 #sudo pipreqs $DJANGO_DIR --force --savepath $DJANGO_DIR/requirements.txt
 sudo pip3 install -r $DJANGO_DIR/requirements.txt
