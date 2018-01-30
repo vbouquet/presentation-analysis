@@ -13,8 +13,7 @@ from utils.inference import load_detection_model
 from utils.inference import load_image
 from utils.preprocessor import preprocess_input
 
-# parameters for loading data and images
-image_path = sys.argv[1]
+
 def face_detection_emotion(image_path):
     detection_model_path = '../trained_models/detection_models/haarcascade_frontalface_default.xml'
     emotion_model_path = '../trained_models/emotion_models/fer2013_mini_XCEPTION.110-0.65.hdf5'
@@ -43,6 +42,9 @@ def face_detection_emotion(image_path):
     gray_image = np.squeeze(gray_image)
     gray_image = gray_image.astype('uint8')
 
+    # object json
+    emotion_tab = []
+
     faces = detect_faces(face_detection, gray_image)
     print(len(faces))
     for face_coordinates in faces:
@@ -63,6 +65,7 @@ def face_detection_emotion(image_path):
         gray_face = np.expand_dims(gray_face, -1)
         emotion_label_arg = np.argmax(emotion_classifier.predict(gray_face))
         emotion_text = emotion_labels[emotion_label_arg]
+        emotion_tab.append(emotion_text)
 
 
         color = (255, 0, 0) 
@@ -72,5 +75,19 @@ def face_detection_emotion(image_path):
 
     bgr_image = cv2.cvtColor(rgb_image, cv2.COLOR_RGB2BGR)
     cv2.imwrite('../snippets_example/predicted_test_image.png', bgr_image)
+    jsonData = {
+    'faces': len(faces),
+    'emotions': {
+        'happy': emotion_tab.count('happy'),
+        'sad': emotion_tab.count('sad'),
+        'angry': emotion_tab.count('angry'),
+        'surprise': emotion_tab.count('surprise'),
+        'fear': emotion_tab.count('fear'),
+        'neutral': emotion_tab.count('neutral')
+        }
+    }
+    return jsonData
 
-
+if __name__ == '__main__':
+    image_path = sys.argv[1]
+    print(face_detection_emotion(image_path))
