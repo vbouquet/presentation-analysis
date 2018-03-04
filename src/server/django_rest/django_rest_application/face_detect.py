@@ -2,6 +2,7 @@ import sys
 
 import cv2
 from keras.models import load_model
+from keras import backend as be
 import numpy as np
 import os
 
@@ -21,23 +22,14 @@ def face_detection_emotion(image_path):
 
     detection_model_path = base_dir + '/trained_models/detection_models/haarcascade_frontalface_default.xml'
     emotion_model_path = base_dir + '/trained_models/emotion_models/fer2013_mini_XCEPTION.110-0.65.hdf5'
-    # emotion_model_path = '../trained_models/fer2013_mini_XCEPTION.119-0.65.hdf5'
-    gender_model_path = '../trained_models/gender_models/simple_CNN.81-0.96.hdf5'
     emotion_labels = get_labels('fer2013')
-    gender_labels = get_labels('imdb')
-    font = cv2.FONT_HERSHEY_SIMPLEX
 
     # hyper-parameters for bounding boxes shape
-    gender_offsets = (30, 30)
-    gender_offsets = (10, 10)
-    emotion_offsets = (20, 30)
     emotion_offsets = (0, 0)
 
     # loading models
     face_detection = load_detection_model(detection_model_path)
     emotion_classifier = load_model(emotion_model_path, compile=False)
-
-    emotion_classifier._make_predict_function()
 
     # getting input model shapes for inference
     emotion_target_size = emotion_classifier.input_shape[1:3]
@@ -52,18 +44,16 @@ def face_detection_emotion(image_path):
     emotion_tab = []
 
     faces = detect_faces(face_detection, gray_image)
+
     print(len(faces))
     for face_coordinates in faces:
-        x1, x2, y1, y2 = apply_offsets(face_coordinates, gender_offsets)
-        # rgb_face = rgb_image[y1:y2, x1:x2]
 
         x1, x2, y1, y2 = apply_offsets(face_coordinates, emotion_offsets)
         gray_face = gray_image[y1:y2, x1:x2]
 
         try:
-            # rgb_face = cv2.resize(rgb_face, (gender_target_size))
             gray_face = cv2.resize(gray_face, emotion_target_size)
-        except:
+        except Exception:
             continue
 
         gray_face = preprocess_input(gray_face, True)
@@ -75,11 +65,8 @@ def face_detection_emotion(image_path):
 
         color = (255, 0, 0)
         draw_bounding_box(face_coordinates, rgb_image, color)
-        # draw_text(face_coordinates, rgb_image, gender_text, color, 0, -20, 1, 2)
         draw_text(face_coordinates, rgb_image, emotion_text, color, 0, -50, 1, 2)
 
-    bgr_image = cv2.cvtColor(rgb_image, cv2.COLOR_RGB2BGR)
-    # cv2.imwrite(base_dir + '/snippets_example/predicted_test_image.png', bgr_image)
     json_data = {
         'faces': len(faces),
         'emotions': {
@@ -91,6 +78,7 @@ def face_detection_emotion(image_path):
             'neutral': emotion_tab.count('neutral')
         }
     }
+    be.clear_session()
     return json_data
 
 
