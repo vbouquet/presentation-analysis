@@ -21,16 +21,14 @@ class CameraRecorder extends React.Component {
       status: "inactive",
       // Utilitaire pour enregistrer la video/audio (https://developer.mozilla.org/en-US/docs/Web/API/MediaRecorder)
       mediaRecorder: null,
-      // Temps entre chaque segment video/audio enregistré (ms)
-      // timeBetweenVideoSlice: 5000,
       // Flux video comme URL Object (https://developer.mozilla.org/en-US/docs/Web/API/URL/createObjectURL)
       stream: null,
       // Les options d'enregistrement de MediaRecorder
       options: {
         // Format de la video
         mimeType: "video/webm",
-        // Qualité de la vidéo et de l'audio (700 KB/s)
-        bitsPerSecond: 700000
+        // Qualité de la vidéo et de l'audio (1.28 MB/s)
+        bitsPerSecond: 1280000
       },
     };
     // Nombre de requête au serveur pour suivre l'évolution des réponses
@@ -101,7 +99,9 @@ class CameraRecorder extends React.Component {
 
   startRecording() {
     console.log("StartRecording")
-    const { status, mediaRecorder/*, timeBetweenVideoSlice*/ } = this.state;
+    const { status, mediaRecorder } = this.state;
+
+    // Temps entre chaque segment video/audio enregistré (ms)
     const timeBetweenVideoSlice = this.props.timerInterval;
 
     if (status == null || status === "inactive") {
@@ -146,18 +146,23 @@ class CameraRecorder extends React.Component {
     // Réponse du serveur (asynchrone)
     function listenerServerResponse() {
       if (request.readyState === XMLHttpRequest.DONE && request.status === 200) {
-        console.log("serverResponse");
-        console.log(this.response);
-        console.log(this);
+        // console.log("serverResponse at " + time);
+        // console.log(this.response);
 
         if (this.response) {
           const json_response = JSON.parse(this.response);
           const attendance = parseInt(json_response.attendance);
-          const attentiveness = parseInt(json_response.attentiveness)
+          const attentiveness = parseInt(json_response.attentiveness);
+          const emotions = json_response.emotions;
+
+          console.log("emotions = " + emotions);
 
           addAttendanceData(time, attendance);
           // TODO Real attentiveness Data
           addAttentivenessData(time, attentiveness);
+          // TODO Add emotion Data
+        } else {
+          console.log("Response is null at " + time);
         }
       }
     }

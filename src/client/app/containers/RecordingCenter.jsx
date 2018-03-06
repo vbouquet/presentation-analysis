@@ -19,6 +19,8 @@ import CameraRecorder from '../components/CameraRecorder.jsx';
 import KeynoteGeneralStat from '../components/KeynoteGeneralStat.jsx';
 import { changeMenuTitle, startRecording, stopRecording } from '../actions';
 
+import SimpleLinePieChart from '../components/SimplePieChart.jsx';
+
 const styles = theme => ({
   root: {
     display: 'flex'
@@ -80,7 +82,7 @@ class RecordingCenter extends React.Component {
       status: "inactive",
       // Date with time of keynote's beginning
       timeStart: null,
-      time: "0:0:0",
+      time: "00:00:00",
     };
 
     this.timer = null;
@@ -116,11 +118,14 @@ class RecordingCenter extends React.Component {
   recordTime() {
     const currentTime = new Date();
     let timeDiff = (currentTime - this.state.timeStart) / 1000;
-    const seconds = Math.round(timeDiff % 60);
+    let seconds = Math.round(timeDiff % 60);
     timeDiff = Math.floor(timeDiff / 60);
-    const minutes = Math.round(timeDiff % 60);
+    let minutes = Math.round(timeDiff % 60);
     timeDiff = Math.floor(timeDiff / 60);
-    const hours = Math.round(timeDiff % 24);
+    let hours = Math.round(timeDiff % 24);
+    if (seconds < 10) seconds = "0" + seconds;
+    if (hours < 10) hours = "0" + hours;
+    if (minutes < 10) minutes = "0" + minutes;
     this.setState({time: hours + ":" + minutes + ":" + seconds});
   }
 
@@ -235,7 +240,7 @@ class RecordingCenter extends React.Component {
 
           {/* Camera live streaming */}
           <Grid item xs={1} sm={1} md={1} xl={1}/>
-          <Grid item xs={4} sm={4} md={4} xl={4}>
+          <Grid item xs={3} sm={3} md={3} xl={3}>
             <Paper className={classes.paper} elevation={6}>
               <Grid container>
                 <Typography type="headline" component="h3">
@@ -249,14 +254,24 @@ class RecordingCenter extends React.Component {
           </Grid>
 
           {/* Live board stats*/}
-          <Grid item xs={6} sm={6} md={6} xl={6}>
+          <Grid item xs={2} sm={2} md={2} xl={2}>
             <Paper className={classes.paper} elevation={6}>
               <Grid container>
                 <Typography type="headline" component="h3">
                   Live board
                 </Typography>
-                <KeynoteGeneralStat time={this.state.time}/>
+                  <KeynoteGeneralStat time={this.state.time}/>
               </Grid>
+            </Paper>
+          </Grid>
+
+          { /* Emotion pie chart */}
+          <Grid item xs={5} sm={5} md={5} xl={5}>
+            <Paper className={classes.paper} elevation={6}>
+              <Typography type="headline" component="h3">
+                  Emotions
+              </Typography>
+              <SimpleLinePieChart />
             </Paper>
           </Grid>
           <Grid item xs={1} sm={1} md={1} xl={1}/>

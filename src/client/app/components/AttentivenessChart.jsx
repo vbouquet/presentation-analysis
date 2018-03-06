@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import SimpleAreaChart from './SimpleAreaChart.jsx'
@@ -27,7 +27,7 @@ class AttentivenessChart extends React.Component {
       yAxisId: "attention",
     };
   }
-  
+
   render() {
     const { active } = this.props;
     const { color } = this.props;
