@@ -17,7 +17,7 @@ const unsubscribe = store.subscribe(() =>
 unsubscribe();
 window.login = login;
 // If you want to login automatically after launching app
-// store.dispatch(login("Alberto"));
+store.dispatch(login("Alberto"));
 
 ReactDOM.render(
   <Provider store={store}>

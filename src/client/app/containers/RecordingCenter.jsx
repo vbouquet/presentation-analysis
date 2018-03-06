@@ -9,6 +9,10 @@ import Dialog,
 { DialogActions, DialogContent, DialogContentText, DialogTitle } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
 import Typography from 'material-ui/Typography';
+import StopIcon from 'material-ui-icons/Stop';
+import PlayArrowIcon from 'material-ui-icons/PlayArrow';
+import PauseIcon from 'material-ui-icons/Pause';
+import green from 'material-ui/colors/green';
 import PresenceChart from '../components/PresenceChart.jsx';
 import AttentivenessChart from '../components/AttentivenessChart.jsx';
 import CameraRecorder from '../components/CameraRecorder.jsx';
@@ -16,11 +20,33 @@ import KeynoteGeneralStat from '../components/KeynoteGeneralStat.jsx';
 import { changeMenuTitle, startRecording, stopRecording } from '../actions';
 
 const styles = theme => ({
+  root: {
+    display: 'flex'
+  },
   paper: {
     paddingTop: 16,
     paddingBottom: 16,
     paddingLeft: 20,
     paddingRight: 20,
+  },
+  icon: {
+    margin: theme.spacing.unit,
+  },
+  button: {
+    margin: theme.spacing.unit,
+  },
+  tet: {
+    textAlign: 'center',
+    margin: 'auto',
+    paddingTop: 16,
+    paddingBottom: 16,
+    paddingLeft: 20,
+    paddingRight: 20,
+  },
+  greenButton: {
+    margin: theme.spacing.unit,
+    color: theme.palette.common.white,
+    backgroundColor: green[500],
   },
 });
 
@@ -50,42 +76,40 @@ class RecordingCenter extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      title: "Recording center - Realtime keynote analysis",
-      cancelRecording: false,
+      // Status de la présentation: inactive, recording, paused, stopped
+      status: "inactive",
+      // Date with time of keynote's beginning
       timeStart: null,
-      time: "0:0:0"
+      time: "0:0:0",
     };
 
-    this.handleOpen = this.handleOpen.bind(this);
-    this.handleClose = this.handleClose.bind(this);
-    this.stopRecording = this.stopRecording.bind(this);
+    this.timer = null;
+    this.title = "Recording center - Realtime keynote analysis";
+    // Reference to the camera recorder child, use this to play, pause etc.
+    this.cameraRecorderRef = null;
+
+    this.startKeynote = this.startKeynote.bind(this);
+    this.cancelKeynote = this.cancelKeynote.bind(this);
+    this.stopKeynote = this.stopKeynote.bind(this);
+    this.resumeKeynote = this.resumeKeynote.bind(this);
+    this.pauseKeynote = this.pauseKeynote.bind(this);
+    this.pauseKeynote = this.pauseKeynote.bind(this);
+    this.resumeKeynote = this.resumeKeynote.bind(this);
     this.recordTime = this.recordTime.bind(this);
+    this.stopTimer = this.stopTimer.bind(this);
   }
 
   componentDidMount() {
-    const title = this.state.title;
-    document.title = title;
-    this.props.actions.changeMenuTitle(title);
+    document.title = this.title;
+    this.props.actions.changeMenuTitle(this.title);
   }
 
   componentWillUnmount() {
-    this.props.actions.stopRecording();
-    this.setState({ cancelRecording: false });
-  }
-
-  handleOpen() {
-    this.props.actions.startRecording();
-    this.setState({
-      timeStart: new Date()
-    }, () => { setInterval(() => this.recordTime(), 5000); });
-  }
-
-  handleClose() {
-    this.setState({
-      cancelRecording: true,
-      timeStart: null,
-      time: "0:0:0"
-    });
+    this.stopTimer();
+    if (this.cameraRecorderRef) {
+      this.cameraRecorderRef.stopRecording();
+    }
+    // TODO clean up CameraRecorder
   }
 
   recordTime() {
@@ -99,25 +123,66 @@ class RecordingCenter extends React.Component {
     this.setState({time: hours + ":" + minutes + ":" + seconds});
   }
 
-  stopRecording() {
-    this.props.actions.stopRecording();
-    this.setState({ cancelRecording: true });
-    // TODO Forward to a summary of the keynote instead
+  stopTimer() {
+    clearInterval(this.timer);
+  }
+
+  startKeynote() {
+    this.props.actions.startRecording();
+    this.setState({
+      status: 'recording',
+      timeStart: new Date()
+    }, () => {
+      this.timer = setInterval(() => this.recordTime(), 5000);
+    });
+  }
+
+  cancelKeynote() {
+    this.setState({
+      status: 'cancelled',
+      timeStart: null,
+      time: "00:00:00"
+    });
+  }
+
+  stopKeynote() {
+    if (this.cameraRecorderRef) {
+      console.log("stopKeynote");
+      this.props.actions.stopRecording();
+      this.setState({
+        status: 'stopped'
+      });
+      this.stopTimer();
+    }
+  }
+
+  resumeKeynote() {
+    if (this.cameraRecorderRef) {
+      console.log("resumeKeynote");
+      this.cameraRecorderRef.pauseOrResumeRecording();
+    }
+  }
+
+  pauseKeynote() {
+    if (this.cameraRecorderRef) {
+      console.log("pauseKeynote");
+      this.cameraRecorderRef.pauseOrResumeRecording();
+      // TODO pause timer
+    }
   }
 
   render() {
-    const { classes } = this.props;
-    const { isRecording } = this.props;
-    const { cancelRecording } = this.state;
+    const { classes, isRecording } = this.props;
+    const { status } = this.state;
 
     // If user canceled recording
-    if (cancelRecording) {
+    if (status === 'stopped' || status === 'cancelled') {
       return (
         <Redirect to="/home" />
       )
     }
     // If not recording yet, ask the user if he wants to start the analysis
-    if (!isRecording) {
+    if (status === 'inactive') {
       return (
         <div>
           <Dialog open>
@@ -129,10 +194,10 @@ class RecordingCenter extends React.Component {
               </DialogContentText>
             </DialogContent>
             <DialogActions>
-              <Button onClick={this.handleClose}>
+              <Button onClick={this.cancelKeynote}>
                 Cancel
               </Button>
-              <Button onClick={this.handleOpen} raised color="primary" autoFocus>
+              <Button onClick={this.startKeynote} raised color="primary" autoFocus>
                 Start
               </Button>
             </DialogActions>
@@ -140,31 +205,48 @@ class RecordingCenter extends React.Component {
         </div>
       )
     }
-    // User press start recording
+    // User is recording a live keynote
     return (
       <div className="component-recording-center">
         <br/><br/><br/><br/>
-        <Grid container className="recording-center-grid">
+        <Grid container className="recording-center-grid" className={classes.root}>
 
-          {/* Camera controls */}
-          <Grid item xs={1} sm={1} md={1} xl={2}/>
-          <Grid item xs={4} sm={4} md={4} xl={3}>
+          {/* Button controls to play/pause/stop keynote */}
+          <Grid item xs={1} sm={3} md={4} xl={5} />
+          <Grid item xs={10} sm={7} md={4} xl={3}>
+              <Grid container>
+                <Button className="button-recording-stop" raised color="accent"
+                        onClick={this.stopKeynote} className={classes.button}>
+                  <StopIcon className={classes.icon} />
+                </Button>
+                <Button className="button-recording-stop" raised
+                        onClick={this.resumeKeynote} className={classes.greenButton}>
+                  <PlayArrowIcon className={classes.icon} />
+                </Button>
+                <Button className="button-recording-stop" raised
+                        onClick={this.pauseKeynote} className={classes.button}>
+                  <PauseIcon className={classes.icon} />
+                </Button>
+              </Grid>
+          </Grid>
+          <Grid item xs={1} sm={2} md={4} xl={4}/>
+
+          {/* Camera live streaming */}
+          <Grid item xs={1} sm={1} md={1} xl={1}/>
+          <Grid item xs={4} sm={4} md={4} xl={4}>
             <Paper className={classes.paper} elevation={6}>
               <Grid container>
                 <Typography type="headline" component="h3">
                   Live recording
                 </Typography>
-                <br />
-                <CameraRecorder isRecording={isRecording} />
-                <Button className="button-recording-stop" raised color="accent"
-                  onClick={this.stopRecording}>
-                  Stop recording
-                </Button>
+                <CameraRecorder isRecording={isRecording}
+                  onRef={ref => (this.cameraRecorderRef = ref)}/>
               </Grid>
             </Paper>
           </Grid>
+
           {/* Live board stats*/}
-          <Grid item xs={6} sm={6} md={6} xl={5}>
+          <Grid item xs={6} sm={6} md={6} xl={6}>
             <Paper className={classes.paper} elevation={6}>
               <Grid container>
                 <Typography type="headline" component="h3">
@@ -174,11 +256,11 @@ class RecordingCenter extends React.Component {
               </Grid>
             </Paper>
           </Grid>
-          <Grid item xs={1} sm={1} md={1} xl={2}/>
+          <Grid item xs={1} sm={1} md={1} xl={1}/>
 
           {/* Presence chart */}
-          <Grid item xs={1} sm={1} md={1} xl={2}/>
-          <Grid item xs={5} sm={5} md={5} xl={4}>
+          <Grid item xs={1} sm={1} md={1} xl={1}/>
+          <Grid item xs={5} sm={5} md={5} xl={5}>
             <Paper className={classes.paper} elevation={6}>
               <Typography type="headline" component="h3">
                   Attendance
@@ -187,7 +269,7 @@ class RecordingCenter extends React.Component {
             </Paper>
           </Grid>
 
-          <Grid item xs={5} sm={5} md={5} xl={4}>
+          <Grid item xs={5} sm={5} md={5} xl={5}>
             <Paper className={classes.paper} elevation={6}>
               <Typography type="headline" component="h3">
                   Attentiveness
@@ -195,7 +277,7 @@ class RecordingCenter extends React.Component {
               <AttentivenessChart active={isRecording} syncId="recording-center-charts" />
             </Paper>
           </Grid>
-          <Grid item xs={1} sm={1} md={1} xl={2}/>
+          <Grid item xs={1} sm={1} md={1} xl={5}/>
 
         </Grid>
       </div>

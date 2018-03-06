@@ -1,16 +1,23 @@
 import React from 'react';
 import Camera from './Camera.jsx';
+import Button from 'material-ui/Button';
+import { connect } from 'react-redux';
+import { addAttendanceStats } from "../actions/";
 
-navigator.getUserMedia =  navigator.getUserMedia ||
-                          navigator.webkitGetUserMedia ||
-                          navigator.mozGetUserMedia;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    actions: {
+      addAttendanceData: (time, attendees) => dispatch(addAttendanceStats(time, attendees))
+    }
+  };
+};
 
 class CameraRecorder extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      isRecording: false,
+      status: "inactive",
       // Utilitaire pour enregistrer la video/audio (https://developer.mozilla.org/en-US/docs/Web/API/MediaRecorder)
       mediaRecorder: null,
       // Temps entre chaque segment video/audio enregistré (ms)
@@ -25,9 +32,13 @@ class CameraRecorder extends React.Component {
         bitsPerSecond: 700000
       },
     };
+    // Nombre de requête au serveur pour suivre l'évolution des réponses
+    // TODO Le changer pour le mettre côté serveur
+    this.counter = 1;
 
     this.startRecording = this.startRecording.bind(this);
     this.stopRecording = this.stopRecording.bind(this);
+    this.pauseOrResumeRecording = this.pauseOrResumeRecording.bind(this);
     this.loadUserMedia = this.loadUserMedia.bind(this);
     this.setUpUserMedia = this.setUpUserMedia.bind(this);
     this.handleUserMediaError = this.handleUserMediaError.bind(this);
@@ -39,19 +50,18 @@ class CameraRecorder extends React.Component {
    * et audio grâce à MediaRecorder
    */
   componentDidMount() {
-    console.log("componentDidMount");
-    if (!navigator.getUserMedia) {
-      alert("Votre navigateur ne prend pas en charge l'enregistrement \
-             de la video par votre webcam depuis le navigateur. \
-             Veuillez utiliser un navigateur récent comme \
-             Chrome ou Firefox.");
-    } else {
-      this.loadUserMedia();
-    }
+    console.log("componentDidMount CameraRecorder");
+    // Ajout de la référence de se composant pour le composant père qui peut
+    // ensuite appeler les méthodes d'ici
+    this.props.onRef(this);
+    this.loadUserMedia();
   }
 
   componentWillUnmount() {
-    this.stopRecording();
+    console.log("componentWillUnmount CameraRecorder");
+    this.props.onRef(undefined);
+    this.state.mediaRecorder.stop();
+    window.URL.revokeObjectURL(this.state.stream);
   }
 
   /**
@@ -80,23 +90,27 @@ class CameraRecorder extends React.Component {
   }
 
   handleUserMediaError(err) {
+    alert("Impossible de démarrer l'enregistrement. \
+          Vérifiez que votre navigateur est à jour, et que vous utilisez  \
+          un navigateur supporté: Chrome-47.0+ ou Firefox-25.0+");
     console.log("handleUserMediaError");
     console.log("loadUserMedia: failure   !");
     console.log("loadUserMedia error: " + err);
   }
 
   startRecording() {
-    const { isRecording } = this.state;
-    const { mediaRecorder } = this.state;
-    const { timeBetweenVideoSlice } = this.state;
+    console.log("StartRecording")
+    const { status, mediaRecorder, timeBetweenVideoSlice } = this.state;
+    // const { mediaRecorder } = this.state;
+    // const { timeBetweenVideoSlice } = this.state;
 
-    if (!isRecording) {
+    if (status == null || status === "inactive") {
       console.log("startRecording");
       mediaRecorder.start(timeBetweenVideoSlice);
-      let stream = window.URL.createObjectURL(mediaRecorder.stream);
+      const stream = window.URL.createObjectURL(mediaRecorder.stream);
 
       this.setState({
-        isRecording: true,
+        status: "recording",
         stream: stream,
       });
 
@@ -106,8 +120,8 @@ class CameraRecorder extends React.Component {
   }
 
   sendVideoToServer(event) {
-    const { mediaRecorder } = this.state;
-    const { timeBetweenVideoSlice } = this.state;
+    const { mediaRecorder, timeBetweenVideoSlice } = this.state;
+    // const { timeBetweenVideoSlice } = this.state;
     const { mimeType } = this.state.options;
 
     const file = new File([event.data],
@@ -126,39 +140,69 @@ class CameraRecorder extends React.Component {
     data.append("filename", file.name);
     request.send(data);
 
+    const addAttendanceData = this.props.actions.addAttendanceData;
+    let counter = this.counter;
     // Réponse du serveur (asynchrone) => ISSUE NOT WORKING
     function listenerServerResponse() {
-      console.log("ServerResponse");
-      console.log(this);
       if (request.readyState === XMLHttpRequest.DONE && request.status === 200) {
+        console.log("serverResponse");
         console.log(this.response);
+        console.log(this);
+
+        if (this.response) {
+          const json_response = JSON.parse(this.response);
+          const attendance = json_response.attendance;
+          addAttendanceData(counter, attendance);
+          counter = counter + 1;
+          console.log("Attendance = " + attendance)
+        }
       }
     }
   };
 
   stopRecording() {
-    console.log("stopRecording");
-    if (this.state.isRecording) {
-
-      this.state.mediaRecorder.stop();
-
-      // Libère la mémoire associé au fichier video
-      window.URL.revokeObjectURL(this.state.stream);
+    console.log("stopRecording !");
+    const { mediaRecorder, stream } = this.state;
+    // const { stream } = this.state;
+    if (mediaRecorder != null && mediaRecorder != undefined && mediaRecorder.state !== "inactive") {
+      console.log("stopRecording not inactive !")
+      mediaRecorder.stop();
+      window.URL.revokeObjectURL(stream);
 
       this.setState({
-        isRecording: false,
-        stream: "",
+        status: "inactive",
+        // stream: window.URL.revokeObjectURL(stream),
       });
     }
   }
 
+  pauseOrResumeRecording() {
+    console.log("pauseOrResumeRecording")
+    const { mediaRecorder } = this.state;
+    if (mediaRecorder != null && mediaRecorder.state !== "inactive") {
+      if (mediaRecorder.state === "recording") {
+        mediaRecorder.pause();
+        this.setState({
+          status: "paused"
+        })
+      } else if (mediaRecorder.state === "paused") {
+        mediaRecorder.resume();
+        this.setState({
+          status: "recording"
+        })
+      }
+    }
+  }
+
   render() {
+    const { stream, status } = this.state;
     return (
       <div className="component-recorder">
-        <Camera src={this.state.stream} />
+        <Camera src={stream} status={status}/>
       </div>
     )
   }
 }
 
+CameraRecorder = connect(null, mapDispatchToProps)(CameraRecorder);
 export default CameraRecorder;

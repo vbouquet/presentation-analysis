@@ -42,15 +42,15 @@ class PresenceChart extends React.Component {
   }
 
   componentDidMount() {
-    this.timerID = setInterval(() => this.tick(), 5000);
+    // this.timerID = setInterval(() => this.tick(), 5000);
   }
 
   componentWillUnmount() {
-    clearInterval(this.timerID);
+    // clearInterval(this.timerID);
   }
 
   tick() {
-    this.props.actions.addData(this.state.time+1, this.randomData());
+    // this.props.actions.addData(this.state.time+1, this.randomData());
   }
 
   render() {
@@ -74,7 +74,7 @@ class PresenceChart extends React.Component {
   }
 }
 
-PresenceChart = connect(mapStateToProps, mapDispatchToProps)(PresenceChart)
+PresenceChart = connect(mapStateToProps, mapDispatchToProps)(PresenceChart);
 PresenceChart.propTypes = propTypes;
 PresenceChart.defaultProps = defaultProps;
 
