@@ -65,27 +65,27 @@ def face_detection(filename):
         try:
             # Face detection every 10 frames
             if frame_id % 60 == 0 and frame_id > FRAME_POS:
-                gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-
-                print("Analyze frame %d" % frame_id)
-
-                faces = face_csc.detectMultiScale(
-                    gray,
-                    scaleFactor=1.1,
-                    minNeighbors=5,
-                    minSize=(30, 30),
-                    # flags=cv2.cv.CV_HAAR_SCALE_IMAGE
-                )
-
-                faces_found.append(len(faces))
-
-                # Uncomment to generate frame image with detected faces.
-                # Beware it creates a lot of images !
+                # gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+                #
+                # print("Analyze frame %d" % frame_id)
+                #
+                # faces = face_csc.detectMultiScale(
+                #     gray,
+                #     scaleFactor=1.1,
+                #     minNeighbors=5,
+                #     minSize=(30, 30),
+                #     # flags=cv2.cv.CV_HAAR_SCALE_IMAGE
+                # )
+                #
+                # faces_found.append(len(faces))
+                #
+                # # Uncomment to generate frame image with detected faces.
+                # # Beware it creates a lot of images !
                 img = BASE_DIR + "/face_detection/faces_found/faces_found_" + str(int(frame_id)) + ".png"
-
-                # Draw a rectangle around the faces
-                for (x, y, w, h) in faces:
-                    cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 0), 5)
+                #
+                # # Draw a rectangle around the faces
+                # for (x, y, w, h) in faces:
+                #     cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 0), 5)
 
                 # Used to write image
                 cv2.imwrite(img, frame)

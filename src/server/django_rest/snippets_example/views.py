@@ -26,7 +26,24 @@ class SnippetViewSet(viewsets.ModelViewSet):
         self.perform_create(serializer)
 
         faces_data = video_face_detection.face_detection(self.request.data.get("filename"))
-        return Response({'num_file': '', 'attendance': faces_data['faces'], 'emotions': faces_data['emotions'],
+        attendance = 0
+        emotions = {
+            'emotions': {
+                'happy': 0,
+                'sad': 0,
+                'angry': 0,
+                'surprise': 0,
+                'fear': 0,
+                'neutral': 0
+            }
+        }
+        try:
+            attendance = faces_data['faces']
+            emotions = faces_data['emotions']
+        except KeyError:
+            pass
+        print(faces_data)
+        return Response({'num_file': '', 'attendance': attendance, 'emotions': emotions,
                          'attentiveness': ''})
 
     # Used to delete files on filesystem

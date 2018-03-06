@@ -18,7 +18,7 @@ def detect_faces(detection_model, gray_image_array):
     return detection_model.detectMultiScale(
         gray_image_array,
         scaleFactor=1.1,
-        minNeighbors=3,
+        minNeighbors=5,
         minSize=(30, 30)
         # flags=cv2.CASCADE_SCALE_IMAGE
     )
