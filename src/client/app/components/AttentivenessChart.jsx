@@ -1,20 +1,11 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { addAttentivenessStats } from '../actions';
 import SimpleAreaChart from './SimpleAreaChart.jsx'
 
 const mapStateToProps = state => {
   return {
     data: state.keynoteStats.attentivenessData
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    actions: {
-      addData: (time, attention) => dispatch(addAttentivenessStats(time, attention))
-    }
   };
 };
 
@@ -36,23 +27,7 @@ class AttentivenessChart extends React.Component {
       yAxisId: "attention",
     };
   }
-
-  randomData() {
-    return Math.floor(Math.random() * (200) + 1) - 100;
-  }
-
-  componentDidMount() {
-    this.timerID = setInterval(() => this.tick(), 5000);
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.timerID);
-  }
-
-  tick() {
-    this.props.actions.addData(this.state.time+1, this.randomData());
-  }
-
+  
   render() {
     const { active } = this.props;
     const { color } = this.props;
@@ -74,7 +49,7 @@ class AttentivenessChart extends React.Component {
   }
 }
 
-AttentivenessChart = connect(mapStateToProps, mapDispatchToProps)(AttentivenessChart);
+AttentivenessChart = connect(mapStateToProps, null)(AttentivenessChart);
 AttentivenessChart.propTypes = propTypes;
 AttentivenessChart.defaultProps = defaultProps;
 

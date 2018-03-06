@@ -2,12 +2,13 @@ import React from 'react';
 import Camera from './Camera.jsx';
 import Button from 'material-ui/Button';
 import { connect } from 'react-redux';
-import { addAttendanceStats } from "../actions/";
+import { addAttendanceStats, addAttentivenessStats } from "../actions/";
 
 const mapDispatchToProps = (dispatch) => {
   return {
     actions: {
-      addAttendanceData: (time, attendees) => dispatch(addAttendanceStats(time, attendees))
+      addAttendanceData: (time, attendees) => dispatch(addAttendanceStats(time, attendees)),
+      addAttentivenessData: (time, attention) => dispatch(addAttentivenessStats(time, attention))
     }
   };
 };
@@ -21,7 +22,7 @@ class CameraRecorder extends React.Component {
       // Utilitaire pour enregistrer la video/audio (https://developer.mozilla.org/en-US/docs/Web/API/MediaRecorder)
       mediaRecorder: null,
       // Temps entre chaque segment video/audio enregistré (ms)
-      timeBetweenVideoSlice: 5000,
+      // timeBetweenVideoSlice: 5000,
       // Flux video comme URL Object (https://developer.mozilla.org/en-US/docs/Web/API/URL/createObjectURL)
       stream: null,
       // Les options d'enregistrement de MediaRecorder
@@ -100,9 +101,8 @@ class CameraRecorder extends React.Component {
 
   startRecording() {
     console.log("StartRecording")
-    const { status, mediaRecorder, timeBetweenVideoSlice } = this.state;
-    // const { mediaRecorder } = this.state;
-    // const { timeBetweenVideoSlice } = this.state;
+    const { status, mediaRecorder/*, timeBetweenVideoSlice*/ } = this.state;
+    const timeBetweenVideoSlice = this.props.timerInterval;
 
     if (status == null || status === "inactive") {
       console.log("startRecording");
@@ -120,8 +120,7 @@ class CameraRecorder extends React.Component {
   }
 
   sendVideoToServer(event) {
-    const { mediaRecorder, timeBetweenVideoSlice } = this.state;
-    // const { timeBetweenVideoSlice } = this.state;
+    const { mediaRecorder } = this.state;
     const { mimeType } = this.state.options;
 
     const file = new File([event.data],
@@ -141,8 +140,10 @@ class CameraRecorder extends React.Component {
     request.send(data);
 
     const addAttendanceData = this.props.actions.addAttendanceData;
-    let counter = this.counter;
-    // Réponse du serveur (asynchrone) => ISSUE NOT WORKING
+    const addAttentivenessData = this.props.actions.addAttentivenessData;
+    const time = this.props.time;
+
+    // Réponse du serveur (asynchrone)
     function listenerServerResponse() {
       if (request.readyState === XMLHttpRequest.DONE && request.status === 200) {
         console.log("serverResponse");
@@ -151,10 +152,12 @@ class CameraRecorder extends React.Component {
 
         if (this.response) {
           const json_response = JSON.parse(this.response);
-          const attendance = json_response.attendance;
-          addAttendanceData(counter, attendance);
-          counter = counter + 1;
-          console.log("Attendance = " + attendance)
+          const attendance = parseInt(json_response.attendance);
+          const attentiveness = parseInt(json_response.attentiveness)
+
+          addAttendanceData(time, attendance);
+          // TODO Real attentiveness Data
+          addAttentivenessData(time, attentiveness);
         }
       }
     }

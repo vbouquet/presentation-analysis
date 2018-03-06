@@ -84,6 +84,7 @@ class RecordingCenter extends React.Component {
     };
 
     this.timer = null;
+    this.timerInterval = 5000;
     this.title = "Recording center - Realtime keynote analysis";
     // Reference to the camera recorder child, use this to play, pause etc.
     this.cameraRecorderRef = null;
@@ -128,12 +129,13 @@ class RecordingCenter extends React.Component {
   }
 
   startKeynote() {
+    const timerInterval = this.timerInterval;
     this.props.actions.startRecording();
     this.setState({
       status: 'recording',
       timeStart: new Date()
     }, () => {
-      this.timer = setInterval(() => this.recordTime(), 5000);
+      this.timer = setInterval(() => this.recordTime(), timerInterval);
     });
   }
 
@@ -239,7 +241,8 @@ class RecordingCenter extends React.Component {
                 <Typography type="headline" component="h3">
                   Live recording
                 </Typography>
-                <CameraRecorder isRecording={isRecording}
+                <CameraRecorder isRecording={isRecording} time={this.state.time}
+                  timerInterval={this.timerInterval}
                   onRef={ref => (this.cameraRecorderRef = ref)}/>
               </Grid>
             </Paper>

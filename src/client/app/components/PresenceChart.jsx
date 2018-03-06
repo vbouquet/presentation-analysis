@@ -1,20 +1,11 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { addAttendanceStats } from "../actions/";
 import SimpleAreaChart from './SimpleAreaChart.jsx'
 
 const mapStateToProps = state => {
   return {
     data: state.keynoteStats.attendanceData
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    actions: {
-      addData: (time, attendees) => dispatch(addAttendanceStats(time, attendees))
-    }
   };
 };
 
@@ -41,18 +32,6 @@ class PresenceChart extends React.Component {
     return Math.floor(Math.random() * (100) + 1);
   }
 
-  componentDidMount() {
-    // this.timerID = setInterval(() => this.tick(), 5000);
-  }
-
-  componentWillUnmount() {
-    // clearInterval(this.timerID);
-  }
-
-  tick() {
-    // this.props.actions.addData(this.state.time+1, this.randomData());
-  }
-
   render() {
     const { active } = this.props;
     const { color } = this.props;
@@ -60,9 +39,9 @@ class PresenceChart extends React.Component {
     const label = this.state.yAxisId;
     if (active)
       return (
-        <SimpleAreaChart data={this.props.data} label={label} color={color}
+      <SimpleAreaChart data={this.props.data} label={label} color={color}
                          syncId={syncId} fillColorByValue={false}
-        />
+      />
       );
     else {
       return (
@@ -74,7 +53,7 @@ class PresenceChart extends React.Component {
   }
 }
 
-PresenceChart = connect(mapStateToProps, mapDispatchToProps)(PresenceChart);
+PresenceChart = connect(mapStateToProps, null)(PresenceChart);
 PresenceChart.propTypes = propTypes;
 PresenceChart.defaultProps = defaultProps;
 
