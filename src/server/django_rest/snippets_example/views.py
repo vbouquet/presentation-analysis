@@ -25,8 +25,9 @@ class SnippetViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
 
-        faces_found = video_face_detection.face_detection(self.request.data.get("filename"))
-        return Response({'num_file': '', 'attendance': faces_found, 'attentiveness': ''})
+        faces_data = video_face_detection.face_detection(self.request.data.get("filename"))
+        return Response({'num_file': '', 'attendance': faces_data['faces'], 'emotions': faces_data['emotions'],
+                         'attentiveness': ''})
 
     # Used to delete files on filesystem
     @receiver(models.signals.post_delete, sender=Snippet)

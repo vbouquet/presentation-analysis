@@ -1,5 +1,6 @@
 import cv2
 import os
+from django_rest_application.face_detect import face_detection_emotion
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FRAME_POS = 0
@@ -48,6 +49,7 @@ def face_detection(filename):
     cam = cv2.VideoCapture(final_file)
 
     faces_found = []
+    json_emotions = {}
 
     print("FRAME_POS = %f" % FRAME_POS)
 
@@ -88,12 +90,12 @@ def face_detection(filename):
                 # Used to write image
                 cv2.imwrite(img, frame)
 
+                json_emotions = face_detection_emotion(img)
                 FRAME_POS = frame_id
         except ZeroDivisionError:
             pass
     cam.release()
     try:
-        print(faces_found)
-        return max(faces_found)
+        return json_emotions
     except ValueError:
         return 0

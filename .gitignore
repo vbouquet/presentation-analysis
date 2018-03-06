@@ -66,7 +66,9 @@ coverage.xml
 *.log
 .static_storage/
 .media/
+faces_found/
 local_settings.py
+*.sqlite3
 
 # pyenv
 .python-version
@@ -80,3 +82,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+bin/
+lib/
+include/
+share/
