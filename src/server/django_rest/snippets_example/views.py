@@ -1,4 +1,6 @@
 import os
+import random
+
 from django.db import models
 from django.dispatch import receiver
 from rest_framework.parsers import MultiPartParser
@@ -43,8 +45,25 @@ class SnippetViewSet(viewsets.ModelViewSet):
         except KeyError:
             pass
         print(faces_data)
-        return Response({'num_file': '', 'attendance': attendance, 'emotions': emotions,
-                         'attentiveness': ''})
+
+        # attendance = random.randint(0, 20)
+        attentiveness = random.randint(0, 200) - 100
+        # emotions = {
+        #         'happy':        random.randint(0, 5),
+        #         'sad':          random.randint(0, 5),
+        #         'angry':        random.randint(0, 5),
+        #         'surprise':     random.randint(0, 5),
+        #         'fear':         random.randint(0, 5),
+        #         'neutral':      random.randint(0, 5)
+        # }
+        m_response = {
+            'num_file': '0',
+            'attendance': attendance,
+            'emotions': emotions,
+            'attentiveness': attentiveness
+        }
+        print(m_response)
+        return Response(m_response)
 
     # Used to delete files on filesystem
     @receiver(models.signals.post_delete, sender=Snippet)

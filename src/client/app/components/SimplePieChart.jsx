@@ -1,14 +1,21 @@
 import React, { Component } from 'react';
 import { PieChart, Pie, Sector, Cell, ResponsiveContainer } from 'recharts';
+import { connect } from 'react-redux';
 
-const data = [
-  {name: 'Happy', value: 400},
-  {name: 'Sad', value: 300},
-  {name: 'Angry', value: 300},
-  {name: 'Surprise', value: 200},
-  {name: 'Fear', value: 200},
-  {name: 'Neutral', value: 200}
-];
+const mapStateToProps = state => {
+  return {
+    data: state.keynoteStats.emotionsData
+  };
+};
+
+// const data = [
+//   {name: 'Happy', value: 400},
+//   {name: 'Sad', value: 300},
+//   {name: 'Angry', value: 300},
+//   {name: 'Surprise', value: 200},
+//   {name: 'Fear', value: 200},
+//   {name: 'Neutral', value: 200}
+// ];
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#FF8012', '#FF8542'];
 
 const renderActiveShape = (props) => {
@@ -86,7 +93,7 @@ class SimplePieChart extends React.Component {
         <Pie
         	activeIndex={this.state.activeIndex}
           activeShape={renderActiveShape}
-          data={data}
+          data={this.props.data}
           dataKey="value"
           innerRadius="40%"
           outerRadius="60%"
@@ -107,4 +114,5 @@ class SimplePieChart extends React.Component {
   }
 }
 
+SimplePieChart = connect(mapStateToProps, null)(SimplePieChart);
 export default SimplePieChart;

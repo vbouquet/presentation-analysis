@@ -10,6 +10,7 @@ export const RESET_ATTENTIVENESS_STATS = 'RESET_ATTENTIVENESS_STATS';
 export const RESET_ALL_STATS = 'RESET_ALL_STATS';
 export const GET_LAST_ATTENDANCE_STATS = 'GET_LAST_ATTENDANCE_STATS';
 export const GET_LAST_ATTENTIVENESS_STATS = 'GET_LAST_ATTENTIVENESS_STATS';
+export const ADD_EMOTION_STATS = 'GEST_LAST_EMOTIONS_STATS'
 
 export function startRecording() {
     console.log("Action: startRecording");
@@ -37,13 +38,18 @@ export function changeMenuTitle(title) {
 }
 
 export function addAttendanceStats(time, attendees) {
-    console.log("Action: addAttendanceStats");
+    console.log("Action: addAttendanceStats, " + JSON.stringify(attendees));
     return { type: ADD_ATTENDANCE_STATS, time: time, attendees: attendees};
 }
 
 export function addAttentivenessStats(time, attention) {
-  console.log("Action: addAttentivenessStats");
+  console.log("Action: addAttentivenessStats, " + JSON.stringify(attention));
   return { type: ADD_ATTENTIVENESS_STATS, time: time, attention: attention};
+}
+
+export function addEmotionsStats(time, emotions) {
+  console.log("Action: addEmotionsStats, " + JSON.stringify(emotions));
+  return { type: ADD_EMOTION_STATS, time: time, emotions: emotions};
 }
 
 export function resetAttendanceStats() {

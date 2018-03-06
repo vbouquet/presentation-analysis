@@ -2,13 +2,14 @@ import React from 'react';
 import Camera from './Camera.jsx';
 import Button from 'material-ui/Button';
 import { connect } from 'react-redux';
-import { addAttendanceStats, addAttentivenessStats } from "../actions/";
+import { addAttendanceStats, addAttentivenessStats, addEmotionsStats } from "../actions/";
 
 const mapDispatchToProps = (dispatch) => {
   return {
     actions: {
       addAttendanceData: (time, attendees) => dispatch(addAttendanceStats(time, attendees)),
-      addAttentivenessData: (time, attention) => dispatch(addAttentivenessStats(time, attention))
+      addAttentivenessData: (time, attention) => dispatch(addAttentivenessStats(time, attention)),
+      addEmotionsData: (time, emotions) => dispatch(addEmotionsStats(time, emotions))
     }
   };
 };
@@ -141,6 +142,7 @@ class CameraRecorder extends React.Component {
 
     const addAttendanceData = this.props.actions.addAttendanceData;
     const addAttentivenessData = this.props.actions.addAttentivenessData;
+    const addEmotionsData = this.props.actions.addEmotionsData;
     const time = this.props.time;
 
     // Réponse du serveur (asynchrone)
@@ -155,12 +157,9 @@ class CameraRecorder extends React.Component {
           const attentiveness = parseInt(json_response.attentiveness);
           const emotions = json_response.emotions;
 
-          console.log("emotions = " + emotions);
-
           addAttendanceData(time, attendance);
-          // TODO Real attentiveness Data
           addAttentivenessData(time, attentiveness);
-          // TODO Add emotion Data
+          addEmotionsData(time, emotions)
         } else {
           console.log("Response is null at " + time);
         }
