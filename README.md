@@ -40,6 +40,9 @@ sudo mount --bind $HOME_DIR/vagrant_node_modules $PROJECT_DIR/node_modules
 # Lancez le serveur sur localhost:8080
 node src/server/express/main.js &
 
+# Transpiler le code javascript
+npm run build
+
 # Lancez le serveur REST
 python3.5 $DJANGO_DIR/manage.py runserver 0.0.0.0:8000 &
 ```
