@@ -5,12 +5,17 @@ from django_rest_application.face_detect import face_detection_emotion
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FRAME_POS = 0
 FIRST_FILENAME = ""
+json_emotions = {}
 
 
 def face_detection(filename):
     print(cv2.__version__)
 
     global FRAME_POS
+
+    global json_emotions
+    if not json_emotions:
+        json_emotions = {}
 
     # //TODO move later, only need to be used the first time
     img_folder = BASE_DIR + '/face_detection/faces_found/'
@@ -49,7 +54,6 @@ def face_detection(filename):
     cam = cv2.VideoCapture(final_file)
 
     faces_found = []
-    json_emotions = {}
 
     print("FRAME_POS = %f" % FRAME_POS)
 
@@ -64,7 +68,7 @@ def face_detection(filename):
             break
         try:
             # Face detection every 10 frames
-            if frame_id % 60 == 0 and frame_id > FRAME_POS:
+            if frame_id % 300 == 0 and frame_id > FRAME_POS:
                 # gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
                 #
                 # print("Analyze frame %d" % frame_id)
@@ -90,7 +94,11 @@ def face_detection(filename):
                 # Used to write image
                 cv2.imwrite(img, frame)
 
-                json_emotions = face_detection_emotion(img)
+                try:
+                    json_emotions = face_detection_emotion(img)
+                except (ValueError, TypeError):
+                    print("Trop d'images !")
+                    pass
                 FRAME_POS = frame_id
         except ZeroDivisionError:
             pass

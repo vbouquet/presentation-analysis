@@ -86,7 +86,7 @@ class RecordingCenter extends React.Component {
     };
 
     this.timer = null;
-    this.timerInterval = 5000;
+    this.timerInterval = 10000;
     this.title = "Recording center - Realtime keynote analysis";
     // Reference to the camera recorder child, use this to play, pause etc.
     this.cameraRecorderRef = null;
