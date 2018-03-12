@@ -17,9 +17,15 @@ Oussemo Oulhaci - <oussem93@hotmail.fr>
 * Babel: Transpiling code for new languages features.
 * React: MVC Framework for dynamic statefull web pages.
 * Redux: State container for Javascript apps.
+
+
 * Express: Basic nodejs server (for front-end testing).
 * Django-rest: Framework for building web API.
+
+
 * OpenCV: Computer vision and machine learning library.
+* Keras: High-level neural networks API written in Python.
+* Tenserflow: Open source library specialized in machine learning.
 
 ## Prérequis
 * Git, gestionnaire de version - [Télécharger git](https://git-scm.com/downloads)
@@ -40,11 +46,12 @@ sudo mount --bind $HOME_DIR/vagrant_node_modules $PROJECT_DIR/node_modules
 # Lancez le serveur sur localhost:8080
 node src/server/express/main.js &
 
-# Transpiler le code javascript
-npm run build
-
 # Lancez le serveur REST
 python3.5 $DJANGO_DIR/manage.py runserver 0.0.0.0:8000 &
+
+#! Attention: Après une analyse il faut supprimer les fichiers vidéos (qui peuvent être volumineux)
+#! dans le dossier $DJANGO_DIR/media
+rm -r $DJANGO_DIR/media/*
 ```
 
 ## Developpement
@@ -130,7 +137,19 @@ python3.5 $DJANGO_DIR/manager.py migrate
 
 * [Comment gérer le flux video/audio, gérer les formats en enregistrer](https://developer.mozilla.org/fr/docs/Web/API/MediaRecorder)
 
-## Ressources (old)
+* [Installation de la librairie OpenCV sur Ubuntu 16.04](https://www.pyimagesearch.com/2015/07/20/install-opencv-3-0-and-python-3-4-on-ubuntu/)
+
+* [Reconnaissance faciale en python avec la librairie OpenCV](https://www.superdatascience.com/opencv-face-recognition/)
+
+* [Utilisation de la librairie TensorFlow pour le ré entrainement et de la classification des images](https://codelabs.developers.google.com/codelabs/tensorflow-for-poets/#0)
+
+* [Apprentissage des réseaux de neurones et d’autres technique de machine learning](https://www.coursera.org/learn/machine-learning)
+
+* [Classification des émotions](https://github.com/oarriaga/face_classification)
+
+* [Documentation sur les API Keras](https://keras.io/getting-started/sequential-model-guide/)
+
+## Anciennes ressources
 
 * [Tutorial for using react with D3js (fork adapté pour la version 4 de D3JS)](https://github.com/MMquant/playing-with-react-and-d3)
 
