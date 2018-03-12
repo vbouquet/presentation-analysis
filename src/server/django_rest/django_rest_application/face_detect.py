@@ -1,6 +1,7 @@
 import sys
 
 import cv2
+import tensorflow as tf
 from keras.models import load_model
 from keras import backend as be
 import numpy as np
@@ -15,7 +16,6 @@ from .utils.preprocessor import preprocess_input
 
 
 def face_detection_emotion(image_path):
-
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
     be.set_learning_phase(1)
@@ -31,33 +31,36 @@ def face_detection_emotion(image_path):
     face_detection = load_detection_model(detection_model_path)
     emotion_classifier = load_model(emotion_model_path, compile=False)
 
-    # getting input model shapes for inference
-    emotion_target_size = emotion_classifier.input_shape[1:3]
+    emotion_classifier._make_predict_function()
 
-    # loading images
-    gray_image = load_image(image_path, grayscale=True)
-    gray_image = np.squeeze(gray_image)
-    gray_image = gray_image.astype('uint8')
+    with tf.Graph().as_default():
+        # getting input model shapes for inference
+        emotion_target_size = emotion_classifier.input_shape[1:3]
 
-    # object json
-    emotion_tab = []
+        # loading images
+        gray_image = load_image(image_path, grayscale=True)
+        gray_image = np.squeeze(gray_image)
+        gray_image = gray_image.astype('uint8')
 
-    faces = detect_faces(face_detection, gray_image)
-    for face_coordinates in faces:
-        x1, x2, y1, y2 = apply_offsets(face_coordinates, emotion_offsets)
-        gray_face = gray_image[y1:y2, x1:x2]
+        # object json
+        emotion_tab = []
 
-        try:
-            gray_face = cv2.resize(gray_face, emotion_target_size)
-        except:
-            continue
+        faces = detect_faces(face_detection, gray_image)
+        for face_coordinates in faces:
+            x1, x2, y1, y2 = apply_offsets(face_coordinates, emotion_offsets)
+            gray_face = gray_image[y1:y2, x1:x2]
 
-        gray_face = preprocess_input(gray_face, True)
-        gray_face = np.expand_dims(gray_face, 0)
-        gray_face = np.expand_dims(gray_face, -1)
-        emotion_label_arg = np.argmax(emotion_classifier.predict(gray_face))
-        emotion_text = emotion_labels[emotion_label_arg]
-        emotion_tab.append(emotion_text)
+            try:
+                gray_face = cv2.resize(gray_face, emotion_target_size)
+            except:
+                continue
+
+            gray_face = preprocess_input(gray_face, True)
+            gray_face = np.expand_dims(gray_face, 0)
+            gray_face = np.expand_dims(gray_face, -1)
+            emotion_label_arg = np.argmax(emotion_classifier.predict(gray_face))
+            emotion_text = emotion_labels[emotion_label_arg]
+            emotion_tab.append(emotion_text)
 
     json_data = {
         'faces': len(faces),

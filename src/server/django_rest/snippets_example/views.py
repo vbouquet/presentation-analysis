@@ -47,7 +47,7 @@ class SnippetViewSet(viewsets.ModelViewSet):
         print(faces_data)
 
         # attendance = random.randint(0, 20)
-        attentiveness = random.randint(0, 200) - 100
+
         # emotions = {
         #         'happy':        random.randint(0, 5),
         #         'sad':          random.randint(0, 5),
@@ -56,12 +56,22 @@ class SnippetViewSet(viewsets.ModelViewSet):
         #         'fear':         random.randint(0, 5),
         #         'neutral':      random.randint(0, 5)
         # }
+
+        if attendance == 0:
+            attentiveness = 0
+        else:
+            # attentiveness = random.randint(0, 200) - 100
+            print(emotions['happy'])
+            print(emotions['neutral'])
+            attentiveness = int(emotions['happy']) + int(emotions['neutral'])
+
         m_response = {
             'num_file': '0',
             'attendance': attendance,
             'emotions': emotions,
             'attentiveness': attentiveness
         }
+
         print(m_response)
         return Response(m_response)
 
