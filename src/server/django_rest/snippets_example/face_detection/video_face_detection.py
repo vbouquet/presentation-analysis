@@ -68,7 +68,7 @@ def face_detection(filename):
             break
         try:
             # Face detection every 10 frames
-            if frame_id % 300 == 0 and frame_id > FRAME_POS:
+            if frame_id % 500 == 0 and frame_id > FRAME_POS:
                 # gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
                 #
                 # print("Analyze frame %d" % frame_id)
@@ -86,7 +86,7 @@ def face_detection(filename):
                 # # Uncomment to generate frame image with detected faces.
                 # # Beware it creates a lot of images !
                 img = BASE_DIR + "/face_detection/faces_found/faces_found_" + str(int(frame_id)) + ".png"
-                #
+                # #
                 # # Draw a rectangle around the faces
                 # for (x, y, w, h) in faces:
                 #     cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 0), 5)
