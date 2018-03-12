@@ -86,7 +86,7 @@ class RecordingCenter extends React.Component {
     };
 
     this.timer = null;
-    this.timerInterval = 5000;
+    this.timerInterval = 10000;
     this.title = "Recording center - Realtime keynote analysis";
     // Reference to the camera recorder child, use this to play, pause etc.
     this.cameraRecorderRef = null;
@@ -204,7 +204,7 @@ class RecordingCenter extends React.Component {
               <Button onClick={this.cancelKeynote}>
                 Cancel
               </Button>
-              <Button onClick={this.startKeynote} raised color="primary" autoFocus>
+              <Button onClick={this.startKeynote} variant="raised" color="primary" autoFocus>
                 Start
               </Button>
             </DialogActions>
@@ -222,15 +222,15 @@ class RecordingCenter extends React.Component {
           <Grid item xs={1} sm={3} md={4} xl={5} />
           <Grid item xs={10} sm={7} md={4} xl={3}>
               <Grid container>
-                <Button className="button-recording-stop" raised color="accent"
+                <Button className="button-recording-stop" variant="raised" color="secondary"
                         onClick={this.stopKeynote} className={classes.button}>
                   <StopIcon className={classes.icon} />
                 </Button>
-                <Button className="button-recording-stop" raised
+                <Button className="button-recording-stop" variant="raised"
                         onClick={this.resumeKeynote} className={classes.greenButton}>
                   <PlayArrowIcon className={classes.icon} />
                 </Button>
-                <Button className="button-recording-stop" raised
+                <Button className="button-recording-stop" variant="raised"
                         onClick={this.pauseKeynote} className={classes.button}>
                   <PauseIcon className={classes.icon} />
                 </Button>
@@ -243,7 +243,7 @@ class RecordingCenter extends React.Component {
           <Grid item xs={3} sm={3} md={3} xl={3}>
             <Paper className={classes.paper} elevation={6}>
               <Grid container>
-                <Typography type="headline" component="h3">
+                <Typography variant="headline" component="h3">
                   Live recording
                 </Typography>
                 <CameraRecorder isRecording={isRecording} time={this.state.time}
@@ -257,7 +257,7 @@ class RecordingCenter extends React.Component {
           <Grid item xs={2} sm={2} md={2} xl={2}>
             <Paper className={classes.paper} elevation={6}>
               <Grid container>
-                <Typography type="headline" component="h3">
+                <Typography variant="headline" component="h3">
                   Live board
                 </Typography>
                   <KeynoteGeneralStat time={this.state.time}/>
@@ -268,7 +268,7 @@ class RecordingCenter extends React.Component {
           { /* Emotion pie chart */}
           <Grid item xs={5} sm={5} md={5} xl={5}>
             <Paper className={classes.paper} elevation={6}>
-              <Typography type="headline" component="h3">
+              <Typography variant="headline" component="h3">
                   Emotions
               </Typography>
               <SimpleLinePieChart />
@@ -280,7 +280,7 @@ class RecordingCenter extends React.Component {
           <Grid item xs={1} sm={1} md={1} xl={1}/>
           <Grid item xs={5} sm={5} md={5} xl={5}>
             <Paper className={classes.paper} elevation={6}>
-              <Typography type="headline" component="h3">
+              <Typography variant="headline" component="h3">
                   Attendance
               </Typography>
               <PresenceChart active={isRecording} syncId="recording-center-charts" />
@@ -289,7 +289,7 @@ class RecordingCenter extends React.Component {
 
           <Grid item xs={5} sm={5} md={5} xl={5}>
             <Paper className={classes.paper} elevation={6}>
-              <Typography type="headline" component="h3">
+              <Typography variant="headline" component="h3">
                   Attentiveness
               </Typography>
               <AttentivenessChart active={isRecording} syncId="recording-center-charts" />

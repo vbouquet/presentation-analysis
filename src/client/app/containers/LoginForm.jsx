@@ -122,7 +122,7 @@ class LoginForm extends React.Component {
 
                 <Grid item xs={1} sm={4} md={8} xl={9} />
                 <Grid item xs={11} sm={8} md={4} xl={3}>
-                  <Button type="submit" raised color="primary">
+                  <Button type="submit" variant="raised" color="primary">
                     Login <Send className={classes.iconStyle}/>
                   </Button>
                 </Grid>

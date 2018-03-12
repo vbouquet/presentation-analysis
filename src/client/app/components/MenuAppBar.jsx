@@ -58,10 +58,10 @@ class MenuAppBar extends React.Component {
       <div className={classes.root}>
         <AppBar position="absolute">
           <Toolbar>
-            <IconButton className={classes.menuButton} color="contrast" aria-label="Menu">
+            <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
               <MenuIcon />
             </IconButton>
-            <Typography type="title" color="inherit" className={classes.flex}>
+            <Typography variant="title" color="inherit" className={classes.flex}>
               {this.props.title}
             </Typography>
             {auth && (
@@ -70,7 +70,7 @@ class MenuAppBar extends React.Component {
                   aria-owns={open ? 'menu-appbar' : null}
                   aria-haspopup="true"
                   onClick={this.handleMenu}
-                  color="contrast"
+                  color="inherit"
                 >
                   <AccountCircle />
                 </IconButton>
@@ -86,7 +86,7 @@ class MenuAppBar extends React.Component {
                     horizontal: 'right',
                   }}
                   open={open}
-                  onRequestClose={this.handleRequestClose}
+                  onClick={this.handleRequestClose}
                 >
                   <MenuItem onClick={this.handleRequestClose}>Profile</MenuItem>
                   <MenuItem onClick={this.handleRequestClose}>My account</MenuItem>

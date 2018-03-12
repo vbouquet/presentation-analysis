@@ -57,7 +57,7 @@ class Home extends React.Component {
 
           <Grid item xs={12}>
             <Grid container className={classes.center}>
-              <Typography type="headline" component="h2">
+              <Typography variant="headline" component="h2">
                 Welcome to realtime keynote analysis
               </Typography>
             </Grid>
@@ -66,7 +66,7 @@ class Home extends React.Component {
           <Grid item xs={12}>
             <Grid container className={classes.center}>
               <Link to="/recording-center">
-                <Button raised color="primary">
+                <Button color="primary" variant="raised">
                   Start new live keynote
                 </Button>
               </Link>
