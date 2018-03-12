@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
-  AreaChart, Area, Line, XAxis, YAxis, CartesianGrid, Tooltip,
-  ResponsiveContainer, Legend
+  AreaChart, Area, Line, XAxis, YAxis, Tooltip, ResponsiveContainer
 } from 'recharts';
 
 const propTypes = {
@@ -58,8 +57,12 @@ class SimpleAreaChart extends React.Component {
 
     return (
       <div>
-        <ResponsiveContainer height={200}>
+        <ResponsiveContainer height={300}>
           <AreaChart data={data} margin={{top: 10, right: 20, left: 20, bottom: 0}} syncId={syncId}>
+          {/* TODO Make XAxis dataKey a props*/}
+            <XAxis dataKey="time" tickCount={3} interval="preserveStartEnd"
+              axisLine={false} tike={false} tickLine={false} minTickGap={10} tickSize={4}
+            />
             <Tooltip />
             <defs>
               { fillColorByValue ? (

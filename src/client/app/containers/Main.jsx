@@ -23,7 +23,6 @@ const defaultProps = {
 class Main extends React.Component {
   render() {
     const { isLoggedIn } = this.props;
-    console.log("Main: isLoggedIn = " + isLoggedIn);
     return (
       <div className="component-main">
         <Switch>
@@ -39,7 +38,6 @@ class Main extends React.Component {
 
 // Redirect to login form if not logged in
 const PrivateRoute = ({ component: Component, isLoggedIn, ...rest }) => {
-  console.log("PrivateRoute => " + isLoggedIn);
   return (
     <Route {...rest} render={props => (
       isLoggedIn ? (

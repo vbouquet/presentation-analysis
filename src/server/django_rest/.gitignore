@@ -1,0 +1,3 @@
+media/*
+db.sqlite*
+snippets_example/face_detection/faces_found/*

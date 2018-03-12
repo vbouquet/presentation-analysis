@@ -23,3 +23,11 @@ fi
 
 # Install utilities
 sudo apt-get install -y git unzip wget
+
+# Install python3.5 and pip3
+if [[ "$CI" != "true" ]]; then
+    sudo apt-get install -y python3.5
+fi
+
+sudo apt-get install -y python3-pip
+sudo pip3 install --upgrade pip
