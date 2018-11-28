@@ -4,11 +4,11 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/9aff66ec6dc841a5971b1647be3b9657)](https://www.codacy.com/app/Remypoc/realtime-keynote-feedback?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=vbouquet/realtime-keynote-feedback&amp;utm_campaign=Badge_Grade)
 
 ## Auteurs
-Valentin Bouquet - <valentin-bouquet@hotmail.fr>
+Valentin Bouquet - <https://github.com/vbouquet>
 
-Rémy Pocquerusse - <remypoc@free.fr>
+Rémy Pocquerusse - <https://github.com/Remypoc>
 
-Oussemo Oulhaci - <oussem93@hotmail.fr>
+Oussemo Oulhaci - <https://github.com/ooussem>
 
 ## Technologies
 
